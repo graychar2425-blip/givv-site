@@ -528,8 +528,12 @@ input[aria-invalid=true]{border-color:#E39A88!important}
       btn.disabled=true;btn.textContent='Joining…';
       const body=new URLSearchParams({email:rec.email,role:rec.role,org:rec.org,iphone:rec.iphone==null?'':rec.iphone?'yes':'no',invite:inviteSlug});
       if(/(^|\.)formsubmit\.co$/.test(new URL(WAITLIST_URL,location.href).hostname)){body.set('_subject',`Givv waitlist: ${rec.role}${rec.org?', '+rec.org:''}`);body.set('_template','table')}
-      try{const r=await fetch(WAITLIST_URL,{method:'POST',headers:{Accept:'application/json'},body});if(!r.ok)throw r;const j=await r.json().catch(()=>({}));if(j&&'success' in j&&String(j.success)!=='true')throw j;joined(rec.email)}
+      /* The form service can take most of a minute to answer: say so after a few seconds, and give up after 90. */
+      const slow=setTimeout(()=>{out.classList.remove('err');out.textContent='Still sending. This can take up to a minute.'},6000);
+      const stop=new AbortController(),limit=setTimeout(()=>stop.abort(),90000);
+      try{const r=await fetch(WAITLIST_URL,{method:'POST',headers:{Accept:'application/json'},body,signal:stop.signal});if(!r.ok)throw r;const j=await r.json().catch(()=>({}));if(j&&'success' in j&&String(j.success)!=='true')throw j;joined(rec.email)}
       catch(err){btn.disabled=false;btn.textContent='Join the waitlist';say(out,'That didn’t go through. Try again in a moment.',1)}
+      finally{clearTimeout(slow);clearTimeout(limit)}
       return;
     }
     await ready;
