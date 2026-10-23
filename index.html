@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C0B0A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2711%27 fill=%27none%27 stroke=%27%23ECE6D8%27 stroke-width=%273%27/%3E%3C/svg%3E">
+<title>Givv: set your spare change free</title>
+<meta name="description" content="Givv turns the spare change from every purchase into a monthly gift to a charity you choose, given on their own page. One ring a month. iPhone, in private beta.">
+<meta property="og:title" content="Givv: set your spare change free">
+<meta property="og:description" content="Spare change from every purchase becomes a monthly gift, given on your charity’s own page. Givv never touches the money.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://graychar2425-blip.github.io/givv-site/og-image.png">
+<meta property="og:url" content="https://graychar2425-blip.github.io/givv-site/">
+<link rel="canonical" href="https://graychar2425-blip.github.io/givv-site/">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Waitlist endpoint. Empty: the form saves to the preview's own list. Set: the form POSTs email, role, org and iphone there. -->
+<meta name="givv:waitlist-url" content="https://formsubmit.co/ajax/dan@hilltopmanagementgroup.com">
+<!-- Fonts are served from this site (OFL, fonts/): no request leaves for a font host. -->
+<link rel="preload" href="fonts/bodoni-moda-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Bodoni Moda";src:url("fonts/bodoni-moda-latin.woff2") format("woff2");font-weight:400 500;font-display:swap}
+@font-face{font-family:"Hanken Grotesk";src:url("fonts/hanken-grotesk-latin.woff2") format("woff2");font-weight:300 600;font-display:swap}
+/* Givv, photographed. The page is carried by real photographs (credited in the footer) and the real app;
+   type and rules stay quiet around them. Warm black, ivory, and copper taken from the penny, used rarely. */
+:root{
+  --ink:#0C0B0A; --ink-2:#141210; --ink-3:#1C1916; --ivory:#ECE6D8; --ivory-2:#C9C2B3; --mist:#A39E92;
+  --hair:rgba(236,230,216,.14); --hair-2:rgba(236,230,216,.28); --copper:#C99267;
+  --f-display:"Bodoni Moda",Didot,"Bodoni 72",Georgia,serif;
+  --f-body:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--ink)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--ink);color:var(--ivory);font:300 17px/1.65 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:clip}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+::selection{background:rgba(201,146,103,.35)}
+:focus-visible{outline:1px solid var(--ivory);outline-offset:4px}
+[hidden]{display:none!important}
+[id]{scroll-margin-top:84px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(20px,4vw,48px)}
+.disp{font-family:var(--f-display);font-weight:400;letter-spacing:-.01em;line-height:1.04;text-wrap:balance;margin:0}
+h2.disp{font-size:clamp(38px,5vw,68px)}
+.lead{font-size:clamp(17px,1.35vw,19px);color:var(--ivory-2);max-width:48ch;margin:0}
+.fine{margin:0;font-size:13px;color:var(--mist)}
+.tag{display:inline-block;font-size:12px;letter-spacing:.04em;color:var(--mist);border:1px solid var(--hair-2);padding:2px 9px;border-radius:999px}
+section{padding-block:clamp(96px,12vw,176px)}
+.sec-h{display:grid;gap:22px;max-width:720px;margin-bottom:clamp(48px,6vw,88px)}
+
+/* Buttons: flat, square-shouldered, quiet. Ivory for the one thing to do; a hairline for the rest. */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 30px;border-radius:2px;font:500 14px/1 var(--f-body);letter-spacing:.06em;text-decoration:none;white-space:nowrap;border:1px solid var(--ivory);transition:background-color .25s,color .25s,border-color .25s}
+.btn-sage{background:var(--ivory);color:var(--ink)}
+.btn-sage:hover{background:transparent;color:var(--ivory)}
+.btn-sage[disabled]{background:transparent;color:var(--mist);border-color:var(--hair-2);cursor:default}
+.btn-soft{background:transparent;color:var(--ivory);border-color:var(--hair-2)}
+.btn-soft:hover{border-color:var(--ivory)}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;inset:0 0 auto;z-index:50;padding:calc(env(safe-area-inset-top,0px) + 18px) clamp(20px,4vw,48px) 18px;transition:background-color .4s,border-color .4s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(12,11,10,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom-color:var(--hair)}
+.nav-in{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-display);font-size:25px;text-decoration:none;justify-self:start;letter-spacing:.01em}
+.logo svg{display:block}
+.links{display:flex;gap:30px}
+.links a{text-decoration:none;font-size:13px;letter-spacing:.06em;color:var(--ivory-2);transition:color .2s}
+.links a:hover{color:var(--ivory)}
+.nav .btn{justify-self:end;min-height:40px;padding:0 20px;font-size:13px}
+@media (max-width:920px){.links{display:none}.nav-in{grid-template-columns:1fr auto}}
+
+/* ---------- hero: the coin on silk, and one sentence ---------- */
+.hero{position:relative;min-height:100svh;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);background:var(--ink)}
+.hero-copy{display:grid;align-content:end;gap:26px;padding:120px clamp(20px,5vw,72px) clamp(48px,8vh,96px);max-width:780px;justify-self:end;width:100%}
+.hero-copy .lead{max-width:44ch}
+.hero h1{font-size:clamp(46px,5.5vw,86px);line-height:1}
+.hero-acts{display:flex;flex-wrap:wrap;gap:12px}
+.hero-fine{display:grid;gap:4px;margin:6px 0 0;font-size:13px;color:var(--mist)}
+.hero-photo{position:relative;margin:0;overflow:hidden;min-height:100svh}
+.hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:46% 48%}
+.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--ink) 0%,rgba(12,11,10,0) 22%),linear-gradient(0deg,rgba(12,11,10,.55),rgba(12,11,10,0) 30%);pointer-events:none}
+.hero-photo figcaption{position:absolute;right:clamp(20px,3vw,40px);bottom:24px;z-index:1;font-size:12px;color:var(--mist)}
+@media (prefers-reduced-motion:no-preference){
+  .hero-photo img{animation:settle 2.8s var(--ease) both}
+  .hero-copy > *{animation:rise 1.4s var(--ease) both}
+  .hero-copy > :nth-child(2){animation-delay:.12s}.hero-copy > :nth-child(3){animation-delay:.22s}.hero-copy > :nth-child(4){animation-delay:.3s}.hero-copy > :nth-child(5){animation-delay:.36s}
+}
+@keyframes settle{from{transform:scale(1.08);opacity:0}to{transform:none;opacity:1}}
+@keyframes rise{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+@media (max-width:860px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .hero-photo{order:-1;min-height:58svh}
+  .hero-photo::after{background:linear-gradient(0deg,var(--ink) 0%,rgba(12,11,10,0) 40%)}
+  .hero-copy{justify-self:stretch;padding-top:8px;align-content:start}
+}
+.invited{display:inline-flex;align-items:center;gap:10px;margin:0;padding:6px 16px 6px 6px;border-radius:999px;border:1px solid var(--hair-2);font-size:14px;justify-self:start}
+.invited i{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ivory);color:var(--ink);font-style:normal;font-weight:600}
+.invited span{display:grid;line-height:1.25}
+.invited small{color:var(--mist);font-size:12px}
+.wlq{display:grid;gap:10px;max-width:480px}
+.wlq .wl-msg:empty{display:none}
+.wlq-row{display:flex;flex-wrap:wrap;gap:10px}
+.wlq input{flex:1 1 220px;min-width:0}
+.wlq p{margin:0}
+
+/* ---------- the penny: one full-bleed photograph, one line ---------- */
+.liberty{position:relative;padding:0;min-height:max(100svh,640px);display:grid;align-items:end;overflow:hidden;isolation:isolate}
+.liberty img{position:absolute;inset:-6% 0;width:100%;height:112%;object-fit:cover;object-position:50% 50%;z-index:-2;transform:translateY(calc(var(--par,0) * 1px))}
+.liberty::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(70% 80% at 100% 100%,rgba(12,11,10,.88),rgba(12,11,10,0) 70%),linear-gradient(0deg,rgba(12,11,10,.75) 0%,rgba(12,11,10,0) 40%,rgba(12,11,10,0) 80%,rgba(12,11,10,.55) 100%)}
+.liberty .wrap{width:100%;padding-block:clamp(40px,6vw,72px);display:grid;gap:18px;justify-items:end}
+.liberty .wrap > *{width:min(430px,100%)}
+.liberty h2.disp{font-size:clamp(32px,3.2vw,46px)}
+
+.liberty .lead{color:var(--ivory)}
+.credit{font-size:12px;color:var(--mist)}
+
+/* ---------- the app ---------- */
+.app{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,7vw,120px);align-items:center}
+@media (max-width:900px){.app{grid-template-columns:minmax(0,1fr)}}
+.app-photo{margin:0;position:relative}
+.app-photo img{width:100%;height:auto;border-radius:2px}
+.app-photo figcaption{margin-top:14px;font-size:13px;color:var(--mist);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.steps{list-style:none;margin:0;padding:0;display:grid}
+.steps li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:4px 12px;padding:26px 0;border-top:1px solid var(--hair)}
+.steps li:last-child{border-bottom:1px solid var(--hair)}
+.steps .n{grid-row:span 2;font-family:var(--f-display);font-size:22px;color:var(--copper);line-height:1.3}
+.steps h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:26px;line-height:1.2}
+.steps p{margin:6px 0 0;color:var(--ivory-2);font-size:16px;max-width:52ch}
+
+/* ---------- streak ---------- */
+.nets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 clamp(28px,4vw,64px)}
+@media (max-width:820px){.nets{grid-template-columns:minmax(0,1fr)}}
+.net{padding:26px 0;border-top:1px solid var(--hair);display:grid;gap:10px;align-content:start}
+.net b{font-family:var(--f-display);font-weight:400;font-size:24px;line-height:1.2}
+.net p{margin:0;color:var(--ivory-2);font-size:16px}
+.yr-sum{margin-top:40px;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;color:var(--ivory-2);font-size:15px}
+.yr-sum b{color:var(--copper);font-weight:500}
+
+/* ---------- causes ---------- */
+.missions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,260px));gap:10px}
+@media (max-width:860px){.missions{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:200px}}
+.mph{position:relative;margin:0;overflow:hidden;background:var(--ink-3);min-width:0;border-radius:2px}
+.mph.lg{grid-column:span 2;grid-row:span 2}
+.mph img{width:100%;height:100%;object-fit:cover;filter:saturate(.8) contrast(1.03) brightness(.88);transition:transform 1.4s var(--ease),filter .8s var(--ease)}
+.mph:hover img{transform:scale(1.025);filter:saturate(.95) brightness(.95)}
+.mph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,11,10,0) 55%,rgba(12,11,10,.7));pointer-events:none}
+.mph figcaption{position:absolute;left:18px;bottom:14px;z-index:1;font-family:var(--f-display);font-size:20px}
+.mph.lg figcaption{font-size:30px;left:24px;bottom:20px}
+.rep{position:absolute;left:14px;top:14px;z-index:1;font-size:11px;letter-spacing:.04em;color:var(--ivory);background:rgba(12,11,10,.55);backdrop-filter:blur(6px);border-radius:999px;padding:3px 10px}
+.qual{margin:18px 0 0;font-size:13px;line-height:1.6;color:var(--mist);max-width:80ch}
+.qual b{font-weight:500;color:var(--ivory-2)}
+@media (prefers-reduced-motion:reduce){.mph img{transition:none}.mph:hover img{transform:none}}
+
+/* ---------- trust: the open hands ---------- */
+.hands{padding-bottom:0}
+.hands .wrap{display:grid;gap:22px;margin-bottom:clamp(40px,5vw,72px)}
+.hands-ph{margin:0;position:relative}
+.hands-ph img{width:100%;height:min(78vh,820px);object-fit:cover;object-position:56% 50%}
+.hands-ph figcaption{position:absolute;right:clamp(20px,3vw,40px);bottom:20px;font-size:12px;color:var(--mist)}
+.trust{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(32px,5vw,80px)}
+@media (max-width:760px){.trust{grid-template-columns:minmax(0,1fr)}}
+.fact{padding:28px 0;border-top:1px solid var(--hair);display:grid;gap:10px;align-content:start}
+.fact h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:26px;line-height:1.2}
+.fact p{margin:0;color:var(--ivory-2);font-size:16px}
+.sources{margin-top:clamp(56px,7vw,96px);display:grid;gap:24px}
+.sources h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:30px}
+.src{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 24px;list-style:none;margin:0;padding:0}
+@media (max-width:900px){.src{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:440px){.src{grid-template-columns:minmax(0,1fr)}}
+.src li{padding:16px 0;border-top:1px solid var(--hair);display:grid;gap:4px}
+.src b{font-weight:500;font-size:15px}
+.src span{font-size:13px;color:var(--mist);line-height:1.55}
+.rules{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 clamp(28px,4vw,64px)}
+@media (max-width:820px){.rules{grid-template-columns:minmax(0,1fr)}}
+.rules li{padding:24px 0;border-top:1px solid var(--hair);display:grid;gap:8px}
+.rules b{font-family:var(--f-display);font-weight:400;font-size:23px}
+.rules span{color:var(--ivory-2);font-size:16px}
+
+/* ---------- charities ---------- */
+.char{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px clamp(40px,7vw,120px);align-items:center}
+@media (max-width:820px){.char{grid-template-columns:minmax(0,1fr)}}
+.char ul{list-style:none;margin:28px 0 36px;padding:0;display:grid;font-size:16px;color:var(--ivory-2)}
+.char li{padding:13px 0;border-top:1px solid var(--hair)}
+.char-ph{margin:0;position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px}
+.char-ph img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:saturate(.8) brightness(.9)}
+.char-ph figcaption{position:absolute;left:14px;bottom:14px;right:14px;font-size:12px;line-height:1.4;color:var(--ivory);text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.char-ph figcaption span{display:block;color:var(--ivory-2)}
+
+/* ---------- faq ---------- */
+.faq{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(32px,6vw,112px)}
+@media (max-width:860px){.faq{grid-template-columns:minmax(0,1fr)}}
+.qs{border-top:1px solid var(--hair)}
+details{border-bottom:1px solid var(--hair)}
+summary{list-style:none;cursor:pointer;padding:24px 0;font-family:var(--f-display);font-size:22px;display:flex;justify-content:space-between;gap:20px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:300 24px/1 var(--f-body);color:var(--mist);transition:transform .3s var(--ease)}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:0;padding:0 0 26px;color:var(--ivory-2);max-width:62ch}
+
+/* ---------- waitlist ---------- */
+.access{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(32px,6vw,96px);align-items:start}
+@media (max-width:860px){.access{grid-template-columns:minmax(0,1fr)}}
+.wl{display:grid;gap:22px;align-content:start}
+.wl-role{border:0;margin:0;padding:0;display:flex;gap:28px}
+.wl-role label{position:relative}
+.wl-role input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.wl-role span{display:inline-block;padding:10px 0;font-size:15px;color:var(--mist);border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.wl-role input:checked + span{color:var(--ivory);border-bottom-color:var(--ivory)}
+.wl-role input:focus-visible + span{outline:1px solid var(--ivory);outline-offset:4px}
+.f{display:grid;gap:6px}
+.f label{font-size:13px;letter-spacing:.04em;color:var(--mist)}
+.f input,.wlq input{height:50px;border:0;border-bottom:1px solid var(--hair-2);border-radius:0;background:transparent;color:var(--ivory);padding:0 2px;font:300 18px var(--f-body);transition:border-color .2s}
+.f input::placeholder,.wlq input::placeholder{color:#6F6A60}
+.f input:focus,.wlq input:focus{outline:none;border-bottom-color:var(--ivory)}
+.wlq input{border:1px solid var(--hair-2);padding:0 14px;font-size:16px}
+input[aria-invalid=true]{border-color:#E39A88!important}
+.chk{display:flex;gap:10px;align-items:center;font-size:15px;color:var(--ivory-2)}
+.chk input{width:18px;height:18px;accent-color:var(--ivory)}
+.wl .btn{justify-self:start}
+.wl-msg{margin:0;font-size:15px;color:var(--ivory);min-height:1.4em}
+.wl-msg.err{color:#F0A08F}
+.side{display:grid;gap:14px;align-content:start;padding-top:8px;border-top:1px solid var(--hair)}
+.side h3{margin:14px 0 0;font-family:var(--f-display);font-weight:400;font-size:28px}
+.side p{margin:0;color:var(--ivory-2)}
+.owner{border-top:1px solid var(--hair);padding-top:14px;display:grid;gap:10px}
+.owner-h{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.owner-h span{color:var(--mist);font-size:14px}
+.owner-copy{margin-left:auto;font-size:13px;color:var(--ivory);padding:6px 12px;border:1px solid var(--hair-2)}
+.owner ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:220px;overflow:auto;font-size:14px;overflow-wrap:anywhere}
+.owner small{color:var(--mist)}
+
+/* ---------- footer ---------- */
+.foot{padding-block:64px 80px;border-top:1px solid var(--hair);display:grid;gap:24px}
+.foot-row{display:flex;flex-wrap:wrap;gap:12px 40px;justify-content:space-between;font-size:13px;color:var(--mist)}
+.foot-row p{margin:0;max-width:72ch}
+.credits{font-size:13px;color:var(--mist);border:0}
+.credits summary{font:400 13px var(--f-body);padding:0}
+.credits summary::after{display:none}
+.credits ul{margin:8px 0 0;padding-left:18px;display:grid;gap:2px}
+@media (max-width:420px){.wlq .btn,.hero-acts .btn{flex:1 1 100%}}
+</style>
+
+<nav class="nav" id="nav" aria-label="Main">
+  <div class="nav-in">
+    <a class="logo" href="#top" aria-label="Givv home"><svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8A16 16 0 1 1 8.96 18.53" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><circle cx="14.82" cy="10.89" r="3" fill="#C99267"/></svg>givv</a>
+    <div class="links"><a href="#how">How it works</a><a href="#streak">The streak</a><a href="#trust">Your money</a><a href="#charities">Charities</a><a href="#faq">Questions</a></div>
+    <a class="btn btn-sage" href="#join">Join the waitlist</a>
+  </div>
+</nav>
+
+<main id="top">
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="invited" id="invited" hidden><i aria-hidden="true"></i><span></span></p>
+      <h1 class="disp">Set your spare change free.</h1>
+      <p class="lead">Every purchase sets aside its spare change, plus a buck. Once a month you give it to a charity you love, on their own donation page. One ring a month. Close it and your streak grows.</p>
+      <form class="wlq" id="wlq" novalidate hidden>
+        <div class="wlq-row">
+          <label class="sr" for="wlq-email">Email</label>
+          <input id="wlq-email" type="email" required autocomplete="email" placeholder="you@example.com">
+          <button class="btn btn-sage" type="submit" id="wlq-btn">Join the waitlist</button>
+        </div>
+        <p class="fine" id="wlq-note"></p>
+        <p class="wl-msg" id="wlq-msg" role="status" aria-live="polite"></p>
+      </form>
+      <div class="hero-acts" id="hero-acts">
+        <a class="btn btn-sage" href="#join">Join the waitlist</a>
+        <a class="btn btn-soft" href="#how">See how it works</a>
+      </div>
+      <p class="hero-fine"><span>Read-only. We see amounts, never card numbers.</span><span>For iPhone. In private beta. First month free, then $2.99 a month through Apple, none of it from your gifts.</span></p>
+    </div>
+    <figure class="hero-photo">
+      <img src="img/lux/coin-silk-1000.webp" srcset="img/lux/coin-silk-1000.webp 1000w, img/lux/coin-silk-1800.webp 1800w" sizes="(max-width:860px) 100vw, 50vw" alt="A single coin resting on folds of silk in a band of light" fetchpriority="high">
+      <figcaption>Photo: Diego Alejandro López</figcaption>
+    </figure>
+  </header>
+
+  <section class="liberty" aria-labelledby="lib-h">
+    <img src="img/lux/liberty-1400.webp" srcset="img/lux/liberty-1400.webp 1400w, img/lux/liberty-2400.webp 2400w" sizes="100vw" alt="Macro photograph of a penny, the word LIBERTY across its copper face" loading="lazy" id="liberty-img">
+    <div class="wrap">
+      <h2 class="disp" id="lib-h">Spare change, set loose on something real.</h2>
+      <p class="lead">Food banks, shelters, rescues, schools, clean water. You choose the cause. Givv takes nothing: your gift goes straight to the charity, on their own page.</p>
+      <p class="credit">Photo: Todd Trapani</p>
+    </div>
+  </section>
+
+  <section id="how" aria-labelledby="how-h">
+    <div class="wrap app">
+      <figure class="app-photo">
+        <img src="img/lux/app-today-900.webp" srcset="img/lux/app-today-900.webp 900w, img/lux/app-today-1600.webp 1600w" sizes="(max-width:900px) 100vw, 44vw" alt="A hand holding an iPhone showing Givv's Today screen: September, 75 meals for Riverside, 8 months in a row, and a button to give 75 meals to Riverside" loading="lazy">
+        <figcaption><span class="tag">Sample</span>Givv’s Today screen with a sample charity. Photo: Luis Quintero.</figcaption>
+      </figure>
+      <div>
+        <div class="sec-h" style="margin-bottom:40px">
+          <h2 class="disp" id="how-h">One ring a month.</h2>
+          <p class="lead">Every month gets a ring. Purchases fill it in meals for your cause, and the gift closes it. The dollars are always exact, one line underneath.</p>
+        </div>
+        <ol class="steps">
+          <li><span class="n" aria-hidden="true">I</span><h3>Shop like normal.</h3><p>Each purchase that reaches Givv counts its change to the next dollar, plus a flat Round Up+ of $1, $2, $5 or $10. A $4.35 coffee sets aside $1.65. Apple Pay taps arrive through a Shortcuts automation you set up.</p></li>
+          <li><span class="n" aria-hidden="true">II</span><h3>Watch the ring fill.</h3><p>About 33¢ a meal at Riverside, a sample charity. The tally shows as meals for your charity, up to a monthly cap you choose. Follow up to three causes.</p></li>
+          <li><span class="n" aria-hidden="true">III</span><h3>Give on Give day.</h3><p>Givv opens the charity’s own donation page. You give there, then confirm in Givv. You have a week.</p></li>
+          <li><span class="n" aria-hidden="true">IV</span><h3>Open your month.</h3><p>It arrives sealed. Pull the strip, the ring closes, and your streak counts one more.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="streak" aria-labelledby="st-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2 class="disp" id="st-h">Twelve rings make your year.</h2>
+        <p class="lead">Each closed month keeps its meals, and the total since you joined never resets. And the streak comes with a safety net.</p>
+      </div>
+      <div class="nets">
+        <div class="net"><b>A week of grace</b><p>Give day is the 1st, the 15th or the last day of the month. Your month counts until 11:59pm seven days later.</p></div>
+        <div class="net"><b>Take a month off</b><p>Pause any month before its Give day. It isn’t counted, isn’t missed, and gets no reminders.</p></div>
+        <div class="net"><b>Give Day Shield</b><p>One per quarter. If a week of grace ends without a gift, the Shield holds your streak automatically.</p></div>
+      </div>
+      <div class="yr-sum"><span><b>552 meals</b> given to Riverside since January</span><span class="tag">Sample</span><span>“Not yet” costs nothing. Givv celebrates finishing the month, never the size of the gift.</span></div>
+    </div>
+  </section>
+
+  <section id="causes" aria-labelledby="ca-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2 class="disp" id="ca-h">You choose the cause.</h2>
+        <p class="lead">When a month closes you can share it. The card is built to make your cause look good: no dollars, no names, just the charity, the meals and your streak, with an invite link for friends. Only when you tap Share; Givv never posts anything for you.</p>
+      </div>
+      <div class="missions">
+        <figure class="mph lg"><img src="img/photos/fresh-food.webp" alt="A grower holding a basket of fresh vegetables in a garden" loading="lazy"><span class="rep">Representative photography</span><figcaption>Fresh food</figcaption></figure>
+        <figure class="mph"><img src="img/photos/hot-meal.webp" alt="A volunteer ladling a warm meal from a large pot" loading="lazy"><figcaption>A hot meal</figcaption></figure>
+        <figure class="mph"><img src="img/photos/second-chance.webp" alt="A woman hugging a dog" loading="lazy" style="object-position:50% 35%"><figcaption>A second chance</figcaption></figure>
+        <figure class="mph"><img src="img/photos/kids-outdoors.webp" alt="Two children looking at woodland plants with a magnifying glass" loading="lazy"><figcaption>Kids outdoors</figcaption></figure>
+        <figure class="mph"><img src="img/photos/clean-water.webp" alt="Hands catching water from a pump" loading="lazy"><figcaption>Clean water</figcaption></figure>
+      </div>
+      <p class="qual"><b>Representative photography.</b> These photos show kinds of work, not any charity’s programs, and no partnership is implied. Fresh food and A hot meal: RDNE Stock project. A second chance: cottonbro studio. Kids outdoors: KATRIN BOLOVTSOVA. Clean water: K. All via Pexels, from FIG’s mission photography.</p>
+    </div>
+  </section>
+
+  <section class="hands" id="trust" aria-labelledby="tr-h">
+    <div class="wrap">
+      <h2 class="disp" id="tr-h">Givv never touches your money.</h2>
+      <p class="lead">It counts, reminds and celebrates. The giving happens between you and your charity.</p>
+    </div>
+    <figure class="hands-ph">
+      <img src="img/lux/open-hands-1400.webp" srcset="img/lux/open-hands-1400.webp 1400w, img/lux/open-hands-2400.webp 2400w" sizes="100vw" alt="Two open hands, palms up, against black" loading="lazy">
+      <figcaption>Photo: Kindel Media</figcaption>
+    </figure>
+  </section>
+
+  <section aria-label="How Givv handles your money">
+    <div class="wrap">
+      <div class="trust">
+        <div class="fact"><h3>Your gift goes straight to the charity</h3><p>You give on the charity’s own donation page, and Givv takes nothing. They send your tax receipt.</p></div>
+        <div class="fact"><h3>No card numbers, no bank logins</h3><p>For each purchase, Givv keeps the store name, amount and date, encrypted in its ledger so your tally is right on every device. It can’t move money.</p></div>
+        <div class="fact"><h3>No cut of your gifts</h3><p>Givv is a membership through Apple: $2.99 a month or $24.99 a year, first month free. None of it comes out of what you give.</p></div>
+        <div class="fact"><h3>You set the limits</h3><p>Set a monthly cap, choose which kinds of purchase count, leave out any single purchase, or change the amount on Give day.</p></div>
+      </div>
+      <div class="sources">
+        <h3>Five ways to count your purchases</h3>
+        <ul class="src">
+          <li><b>Apple Pay taps</b><span>A Shortcuts automation sends each tap to Givv.</span></li>
+          <li><b>Bank alert emails</b><span>Forward your bank’s purchase alerts.</span></li>
+          <li><b>Your statement</b><span>Import it once a month for an exact total.</span></li>
+          <li><b>Apple Card</b><span>Through Apple’s own permission screen.</span></li>
+          <li><b>SimpleFIN Bridge</b><span>Connect accounts through SimpleFIN.</span></li>
+        </ul>
+        <p class="fine">Use one or several. When the same purchase arrives from two sources, Givv tries to count it once.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="charities" aria-labelledby="ch-h" style="padding-top:0">
+    <div class="wrap char">
+      <div>
+        <h2 class="disp" id="ch-h">Turn once‑a‑year donors into monthly ones.</h2>
+        <ul>
+          <li>Free for charities, with nothing to integrate</li>
+          <li>Gifts arrive through your own donation form</li>
+          <li>Your own invite link, on every card your supporters share</li>
+          <li>Your posts reach supporters as you publish them</li>
+        </ul>
+        <a class="btn btn-sage" href="#join" data-join-as="charity">Apply as a launch partner</a>
+      </div>
+      <figure class="char-ph"><img src="img/photos/volunteers.webp" alt="Volunteers in matching shirts after cleaning up a neighborhood park" loading="lazy"><figcaption>Representative photography<span>Photo: Vitaly Gariev / Pexels</span></figcaption></figure>
+    </div>
+  </section>
+
+  <section id="faq" aria-labelledby="faq-h" style="padding-top:0">
+    <div class="wrap faq">
+      <div><h2 class="disp" id="faq-h">Fair questions.</h2></div>
+      <div class="qs">
+        <details><summary>Does Givv take money from my account?</summary><p>No. Givv only counts. On Give day it opens your charity’s donation page and you decide there: the full amount, a different amount, or not yet.</p></details>
+        <details><summary>What does Givv see?</summary><p>The store name, amount and date of each purchase, stored encrypted so your tally is right on every device. Givv never sees card numbers or bank logins and can’t move money.</p></details>
+        <details><summary>What if I miss a month?</summary><p>You have a week after Give day. If that week ends without a gift, your quarter’s Give Day Shield holds the streak. If the Shield is already used, the streak starts again with the next ring, and everything you’ve given stays in your year.</p></details>
+        <details><summary>What does the membership pay for?</summary><p>The round-up tracking, your monthly ring and the Give day reminders. It’s $2.99 a month or $24.99 a year, billed through Apple after a free first month, and none of it comes out of your gifts. Giving on your charity’s page, your history and your giving record never need a membership.</p></details>
+        <details><summary>Can I control how much I give?</summary><p>Yes. Pick the Round Up+ extra ($1, $2, $5 or $10), choose which purchases count, set a monthly cap and leave out any purchase. You also decide the final amount on Give day.</p></details>
+        <details><summary>Who sends my tax receipt?</summary><p>Your charity, because you give on their own donation page. Givv keeps a yearly history you can export for your records.</p></details>
+        <details><summary>Is it on Android?</summary><p>Not yet. Givv is iPhone only for now.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="join" aria-labelledby="ac-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2 class="disp" id="ac-h">Your money’s just sitting there. Put it to work.</h2>
+        <p class="lead">Givv is in private beta. Leave your email and we’ll tell you when your spot opens. Charities on the list are invited first.</p>
+      </div>
+      <div class="access">
+        <form class="wl" id="wl" novalidate>
+          <div class="sr" aria-hidden="true"><label for="wl-hp">Leave this empty</label><input id="wl-hp" name="website" tabindex="-1" autocomplete="off"></div>
+          <fieldset class="wl-role"><legend class="sr">I’m joining as</legend>
+            <label><input type="radio" name="role" value="supporter" id="wl-sup" checked><span>I want to give</span></label>
+            <label><input type="radio" name="role" value="charity" id="wl-char"><span>I run a charity</span></label>
+          </fieldset>
+          <div class="f"><label for="wl-email">Email</label><input id="wl-email" type="email" required autocomplete="email" placeholder="you@example.com"></div>
+          <div class="f"><label for="wl-org" id="wl-org-l">Charity you’d give to (optional)</label><input id="wl-org" autocomplete="organization" placeholder="Your local food bank, church or school" maxlength="120"></div>
+          <label class="chk"><input type="checkbox" id="wl-iphone" checked><span>I have an iPhone</span></label>
+          <button class="btn btn-sage" type="submit" id="wl-btn">Join the waitlist</button>
+          <p class="wl-msg" id="wl-msg" role="status" aria-live="polite"></p>
+          <p class="fine">We’ll only email you about Givv’s launch. You can unsubscribe anytime.</p>
+        </form>
+        <div class="side">
+          <h3>What happens next</h3>
+          <p>We email you once, when your spot opens. Charities on the list hear from us first.</p>
+          <p class="fine">Sign-ups reach our waitlist inbox through FormSubmit, a form service. Your email is used only to tell you about Givv’s launch.</p>
+          <div class="owner" id="owner" hidden>
+            <div class="owner-h"><b>Waitlist</b><span id="owner-count"></span><button type="button" class="owner-copy" id="owner-copy">Copy emails</button></div>
+            <ul id="owner-list"></ul>
+            <small>Only you can see this list.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="wrap">
+  <footer class="foot">
+    <a class="logo" href="#top"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8A16 16 0 1 1 8.96 18.53" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><circle cx="14.82" cy="10.89" r="3" fill="#C99267"/></svg>givv</a>
+    <div class="foot-row">
+      <p>Givv is in development. Charities, numbers and the invite link on this page are samples. Givv does not collect, hold or move donations; you give directly to your charity on their own donation page.</p>
+      <p>Apple Pay and Apple Card are trademarks of Apple Inc.</p>
+    </div>
+    <details class="credits"><summary>Photo credits</summary>
+      <p style="margin:8px 0 0">Photographs via Pexels (Pexels License). The iPhone photo shows Givv’s own Today screen, placed on the photographed phone. Representative photography of missions is from FIG (figgiving.com); those images illustrate a kind of mission, not any charity’s programs, participants or results, and no partnership or endorsement is implied.</p>
+      <ul>
+        <li>Coin on silk: Diego Alejandro López</li>
+        <li>Penny: Todd Trapani</li>
+        <li>Hand holding a phone: Luis Quintero</li>
+        <li>Open hands: Kindel Media</li>
+        <li>Fresh food: RDNE Stock project</li>
+        <li>A hot meal: RDNE Stock project</li>
+        <li>A second chance: cottonbro studio</li>
+        <li>Kids outdoors: KATRIN BOLOVTSOVA</li>
+        <li>Clean water: K</li>
+        <li>Volunteers: Vitaly Gariev</li>
+      </ul>
+    </details>
+  </footer>
+</div>
+<script>
+(function(){
+  /* The one scroll effect: the penny drifts a little slower than the page. Nav gains a backing once you scroll. */
+  const nav=document.getElementById('nav'),lib=document.getElementById('liberty-img');
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let raf=0;
+  const frame=()=>{raf=0;nav.classList.toggle('solid',scrollY>40);
+    if(!still&&lib){const r=lib.parentElement.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight)lib.style.setProperty('--par',((r.top+r.height/2-innerHeight/2)*-.12).toFixed(1))}};
+  addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(frame)},{passive:true});frame();
+
+  /* ---------- Waitlist ---------- */
+  const wl=document.getElementById('wl'),msg=document.getElementById('wl-msg'),wbtn=document.getElementById('wl-btn');
+  const org=document.getElementById('wl-org'),orgL=document.getElementById('wl-org-l'),emailIn=document.getElementById('wl-email');
+  document.querySelectorAll('[data-join-as=charity]').forEach(a=>a.addEventListener('click',()=>{
+    const r=document.getElementById('wl-char');r.checked=true;r.dispatchEvent(new Event('change',{bubbles:true}));
+    setTimeout(()=>org.focus({preventScroll:true}),400);
+  }));
+  wl.addEventListener('change',e=>{
+    if(e.target.name!=='role')return;const c=e.target.value==='charity';
+    orgL.textContent=c?'Organization name':'Charity you’d give to (optional)';
+    org.placeholder=c?'Your organization’s name':'Your local food bank, church or school';
+    if(!wbtn.disabled)wbtn.textContent=c?'Apply as a launch partner':'Join the waitlist';
+    document.getElementById('wl-iphone').closest('label').hidden=c;
+  });
+  const WAITLIST_URL=(document.querySelector('meta[name="givv:waitlist-url"]')||{}).content||'';
+  /* Invite links. A charity's link (givv.app/join/<charity>, or #invite-<charity> on this preview) names the charity at the
+     top, pre-fills it in the form, and records it with the sign-up so invite-link sign-ups can be counted per charity.
+     Only charities in this list are ever named; an unknown link shows the page as usual. */
+  const INVITERS={riverside:{name:'Riverside Food Bank',sample:true}};
+  const inviteSlug=(()=>{const m=location.pathname.match(/\/join\/([a-z0-9-]+)/)||location.hash.match(/^#invite-([a-z0-9-]+)$/);return m&&INVITERS[m[1]]?m[1]:''})();
+  if(inviteSlug){
+    const c=INVITERS[inviteSlug],b=document.getElementById('invited');
+    b.querySelector('i').textContent=c.name[0];
+    b.querySelector('span').innerHTML='';b.querySelector('span').append(`${c.name} invited you`);
+    if(c.sample){const sm=document.createElement('small');sm.textContent='Sample charity';b.querySelector('span').append(sm)}
+    b.hidden=false;org.value=c.name;
+    /* An invited supporter only needs to give an email: a one-field form in the hero, with the charity attached.
+       The full form stays where it is for everyone else. */
+    document.getElementById('wlq').hidden=false;
+    document.getElementById('wlq-note').textContent=`${c.name}${c.sample?' (a sample charity)':''} is saved with your sign-up. iPhone only, in private beta.`;
+    document.querySelector('#hero-acts .btn-sage').hidden=true;
+  }
+  let db=null,uid=null;
+  /* Sign-ups are stored with the page's db capability. Only viewers the platform lets write (the owner and their organization) can save; everyone else sees a plain message. */
+  const ready=(async()=>{
+    if(!window.claude||!window.claude.use)return;
+    try{
+      const [d,u]=await Promise.all([window.claude.use('db'),window.claude.use('user')]);
+      db=d;if(!u)return;uid=await u.id();
+      if(db&&uid){const snap=await db.doc('waitlist/'+uid).get();if(snap.exists)joined(snap.data().email)}
+      if(db&&await u.isOwner())ownerPanel();
+    }catch(e){}
+  })();
+  const qBtn=document.getElementById('wlq-btn'),qMsg=document.getElementById('wlq-msg'),qEmail=document.getElementById('wlq-email');
+  /* Both forms end in the same state: each says who is on the list, and neither can join twice. */
+  const say=(el,t,err,field)=>{el.textContent=t;el.classList.toggle('err',!!err);if(field){field.setAttribute('aria-invalid','true');field.setAttribute('aria-describedby',el.id);field.addEventListener('input',()=>field.removeAttribute('aria-invalid'),{once:true})}};
+  function joined(email){
+    for(const [m,b] of [[msg,wbtn],[qMsg,qBtn]]){m.classList.remove('err');m.textContent=`You’re on the list as ${email}. We’ll email you when your spot opens.`;b.textContent='You’re on the list';b.disabled=true}
+  }
+  /* One save path for both forms. iphone is true, false, or null when the hero form didn't ask. */
+  async function save(rec,btn,out){
+    if(document.getElementById('wl-hp').value){joined(rec.email);return}
+    if(WAITLIST_URL){
+      btn.disabled=true;btn.textContent='Joining…';
+      const body=new URLSearchParams({email:rec.email,role:rec.role,org:rec.org,iphone:rec.iphone==null?'':rec.iphone?'yes':'no',invite:inviteSlug});
+      if(/(^|\.)formsubmit\.co$/.test(new URL(WAITLIST_URL,location.href).hostname)){body.set('_subject',`Givv waitlist: ${rec.role}${rec.org?', '+rec.org:''}`);body.set('_template','table')}
+      try{const r=await fetch(WAITLIST_URL,{method:'POST',headers:{Accept:'application/json'},body});if(!r.ok)throw r;const j=await r.json().catch(()=>({}));if(j&&'success' in j&&String(j.success)!=='true')throw j;joined(rec.email)}
+      catch(err){btn.disabled=false;btn.textContent='Join the waitlist';say(out,'That didn’t go through. Try again in a moment.',1)}
+      return;
+    }
+    await ready;
+    if(!db||!uid){say(out,'Sign-ups can’t be saved from this preview link. They’ll open on the live site.',1);return}
+    btn.disabled=true;btn.textContent='Joining…';
+    try{
+      await db.doc('waitlist/'+uid).set({...rec,invite:inviteSlug,createdAt:new Date().toISOString()});
+      joined(rec.email);
+    }catch(err){
+      btn.disabled=false;btn.textContent='Join the waitlist';
+      say(out,err&&err.code==='invalid_argument'?'This link is view-only, so it can’t save sign-ups. They’ll open on the live site.':'That didn’t go through. Try again in a moment.',1);
+    }
+  }
+  const validEmail=e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  wl.addEventListener('submit',e=>{
+    e.preventDefault();
+    const email=emailIn.value.trim(),role=wl.querySelector('input[name=role]:checked').value;
+    if(!validEmail(email)){say(msg,'Enter an email address like you@example.com.',1,emailIn);emailIn.focus();return}
+    if(role==='charity'&&!org.value.trim()){say(msg,'Add your organization’s name so we know who you are.',1,org);org.focus();return}
+    save({email,role,org:org.value.trim().slice(0,120),iphone:document.getElementById('wl-iphone').checked},wbtn,msg);
+  });
+  document.getElementById('wlq').addEventListener('submit',e=>{
+    e.preventDefault();
+    const email=qEmail.value.trim();
+    if(!validEmail(email)){say(qMsg,'Enter an email address like you@example.com.',1,qEmail);qEmail.focus();return}
+    save({email,role:'supporter',org:INVITERS[inviteSlug]?INVITERS[inviteSlug].name:'',iphone:null},qBtn,qMsg);
+  });
+  function ownerPanel(){
+    const box=document.getElementById('owner'),list=document.getElementById('owner-list'),copyB=document.getElementById('owner-copy');let emails='';
+    box.hidden=false;
+    db.collection('waitlist').orderBy('createdAt','desc').onSnapshot(snap=>{
+      const rows=snap.docs.map(d=>d.data());
+      document.getElementById('owner-count').textContent=`${rows.length} ${rows.length===1?'person':'people'}`;
+      list.textContent='';
+      if(!rows.length){const li=document.createElement('li');li.textContent='No sign-ups yet. They appear here as people join.';list.appendChild(li)}
+      rows.forEach(r=>{const li=document.createElement('li');li.textContent=`${r.email}, ${r.role==='charity'?'charity':'supporter'}${r.org?', '+r.org:''}${r.invite?', via '+r.invite+' invite':''}`;list.appendChild(li)});
+      emails=rows.map(r=>r.email).join(', ');
+    },()=>{box.hidden=true});
+    copyB.addEventListener('click',()=>{
+      const sel=()=>{const rg=document.createRange();rg.selectNodeContents(list);const g=getSelection();g.removeAllRanges();g.addRange(rg);copyB.textContent='Selected'};
+      try{navigator.clipboard.writeText(emails).then(()=>{copyB.textContent='Copied';setTimeout(()=>copyB.textContent='Copy emails',1800)},sel)}catch(e){sel()}
+    });
+  }
+})();
+</script>
+

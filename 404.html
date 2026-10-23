@@ -1,0 +1,12 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Givv</title>
+<script>
+  (function () {
+    var base = '/givv-site/', p = location.pathname, i = p.indexOf('/join/');
+    var slug = i >= 0 ? p.slice(i + 6).split('/')[0].replace(/[^a-z0-9-]/g, '') : '';
+    location.replace(base + (slug ? '#invite-' + slug : ''));
+  })();
+</script>
+<p style="font:16px system-ui;padding:24px">Taking you to <a href="./">Givv</a>…</p>
