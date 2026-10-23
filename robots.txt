@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://graychar2425-blip.github.io/givv-site/sitemap.xml

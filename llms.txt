@@ -1,0 +1,15 @@
+# Givv
+
+> Givv by FIG is an iPhone app that turns the spare change from every purchase into one monthly gift to a charity the member chooses. The gift is made on the charity's own donation page. Givv never touches donated money, takes 0% of gifts and never sees card numbers or bank logins. In private beta in the US.
+
+- How it works: each purchase sets aside its round-up plus $1 ((next whole dollar - amount) + $1.00; a $4.35 coffee sets aside $1.65). One ring a month fills up to the member's cap ($10 to $100, default $25). On Give day, the 1st, the member gives that amount on the charity's own page and confirms it in Givv; there is a week of grace.
+- What Givv sees: purchase amounts, stores and dates only, from a Shortcuts automation on Apple Pay taps, bank alert emails, a monthly statement, Apple Card (FinanceKit) or SimpleFIN Bridge.
+- Price: free to download. Membership through Apple: $2.99 a month or $24.99 a year, first month free. None of it comes out of gifts. Giving on the charity's page, history and the giving record never need a membership.
+- Taxes: Givv keeps a yearly giving record. From tax year 2026, people who don't itemize may deduct up to $1,000 ($2,000 on a joint return) of cash gifts to qualifying charities. Givv's record is not a receipt and not tax advice.
+- Safety nets: a member can take a month off before its Give day; a Give Day Shield holds the streak once a quarter.
+- Charities: free for charities; they keep the donor record and the receipt.
+
+## Links
+
+- [Givv](https://graychar2425-blip.github.io/givv-site/): the landing page and waitlist
+- [FIG](https://figgiving.com/): the company behind Givv
