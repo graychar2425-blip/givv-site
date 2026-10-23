@@ -2,8 +2,8 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0C0B0A">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2711%27 fill=%27none%27 stroke=%27%23ECE6D8%27 stroke-width=%273%27/%3E%3C/svg%3E">
+<meta name="theme-color" content="#0B1D15">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2711%27 fill=%27none%27 stroke=%27%23F2EBDB%27 stroke-width=%273%27/%3E%3C/svg%3E">
 <title>Givv: set your spare change free</title>
 <meta name="description" content="Givv turns the spare change from every purchase into a monthly gift to a charity you choose, given on their own page. One ring a month. iPhone, in private beta.">
 <meta property="og:title" content="Givv: set your spare change free">
@@ -28,285 +28,368 @@
 <!-- Fonts are served from this site (OFL, fonts/): no request leaves for a font host. -->
 <link rel="preload" href="fonts/bodoni-moda-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add('js')</script>
 <style>
 @font-face{font-family:"Bodoni Moda";src:url("fonts/bodoni-moda-latin.woff2") format("woff2");font-weight:400 500;font-display:swap}
 @font-face{font-family:"Hanken Grotesk";src:url("fonts/hanken-grotesk-latin.woff2") format("woff2");font-weight:300 600;font-display:swap}
-/* Givv, photographed. The page is carried by real photographs (credited in the footer) and the real app;
-   type and rules stay quiet around them. Warm black, ivory, and copper taken from the penny, used rarely. */
+/* Givv, kept like a jewel. Spare change is treated the way a jeweller treats a stone: lit, alone, given room.
+   Two chapter colours taken from the app itself: Forest (the app's background) for the dark chapters, Stone paper
+   for the light ones. Gilt appears only on rings, as the app keeps amber for streaks. The one moment of motion is
+   the ring in the hero closing; everything else is still. Notes: research/luxury-references-2026-10-23.md */
 :root{
-  --ink:#0C0B0A; --ink-2:#141210; --ink-3:#1C1916; --ivory:#ECE6D8; --ivory-2:#C9C2B3; --mist:#A39E92;
-  --hair:rgba(236,230,216,.14); --hair-2:rgba(236,230,216,.28); --copper:#C99267;
+  --forest:#0B1D15; --lacquer:#173326; --stone:#E7E6DF; --ivory:#F2EBDB; --moss:#33443A; --gilt:#C9A15E;
   --f-display:"Bodoni Moda",Didot,"Bodoni 72",Georgia,serif;
   --f-body:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --ease:cubic-bezier(.22,1,.36,1); color-scheme:dark;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --pad:clamp(20px,4.4vw,64px);
+  --chapter:clamp(104px,13vw,200px);
 }
+/* Each chapter sets its own ink, so components never need a light and a dark variant. */
+.forest{--bg:var(--forest);--fg:var(--ivory);--fg-2:#BDBBA8;--meta:#9A9C8C;--hair:rgba(242,235,219,.16);--hair-2:rgba(242,235,219,.32);--btn:var(--ivory);--on-btn:var(--forest);--err:#E39A88;background:var(--bg);color:var(--fg);color-scheme:dark}
+.stone{--bg:var(--stone);--fg:var(--forest);--fg-2:var(--moss);--meta:#5B655D;--hair:rgba(11,29,21,.16);--hair-2:rgba(11,29,21,.34);--btn:var(--forest);--on-btn:var(--ivory);--err:#A3402E;background:var(--bg);color:var(--fg);color-scheme:light}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;background:var(--ink)}
+html{scroll-behavior:smooth;background:var(--forest)}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--ink);color:var(--ivory);font:300 17px/1.65 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:clip}
+body{margin:0;font:400 17px/1.65 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:clip;font-kerning:normal}
 img{display:block;max-width:100%}
 a{color:inherit}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-::selection{background:rgba(201,146,103,.35)}
-:focus-visible{outline:1px solid var(--ivory);outline-offset:4px}
+::selection{background:rgba(201,161,94,.38)}
+:focus-visible{outline:2px solid var(--fg,currentColor);outline-offset:4px}
 [hidden]{display:none!important}
-[id]{scroll-margin-top:84px}
+[id]{scroll-margin-top:80px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(20px,4vw,48px)}
-.disp{font-family:var(--f-display);font-weight:400;letter-spacing:-.01em;line-height:1.04;text-wrap:balance;margin:0}
-h2.disp{font-size:clamp(38px,5vw,68px)}
-.lead{font-size:clamp(17px,1.35vw,19px);color:var(--ivory-2);max-width:48ch;margin:0}
-.fine{margin:0;font-size:13px;color:var(--mist)}
-.tag{display:inline-block;font-size:12px;letter-spacing:.04em;color:var(--mist);border:1px solid var(--hair-2);padding:2px 9px;border-radius:999px}
-section{padding-block:clamp(96px,12vw,176px)}
-.sec-h{display:grid;gap:22px;max-width:720px;margin-bottom:clamp(48px,6vw,88px)}
+.skip{position:absolute;left:12px;top:-60px;z-index:99;padding:10px 16px;background:var(--ivory);color:var(--forest);text-decoration:none;font-size:14px}
+.skip:focus{top:12px}
+.wrap{max-width:1440px;margin:0 auto;padding-inline:var(--pad)}
+.ch{padding-block:var(--chapter)}
 
-/* Buttons: flat, square-shouldered, quiet. Ivory for the one thing to do; a hairline for the rest. */
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 30px;border-radius:2px;font:500 14px/1 var(--f-body);letter-spacing:.06em;text-decoration:none;white-space:nowrap;border:1px solid var(--ivory);transition:background-color .25s,color .25s,border-color .25s}
-.btn-sage{background:var(--ivory);color:var(--ink)}
-.btn-sage:hover{background:transparent;color:var(--ivory)}
-.btn-sage[disabled]{background:transparent;color:var(--mist);border-color:var(--hair-2);cursor:default}
-.btn-soft{background:transparent;color:var(--ivory);border-color:var(--hair-2)}
-.btn-soft:hover{border-color:var(--ivory)}
+/* ---------- type ---------- */
+.disp{font-family:var(--f-display);font-weight:400;letter-spacing:-.018em;line-height:.98;text-wrap:balance;margin:0}
+h2.disp{font-size:clamp(44px,6.4vw,96px)}
+.statement{font-family:var(--f-display);font-size:clamp(25px,2.7vw,40px);line-height:1.22;letter-spacing:-.006em;margin:0;text-wrap:pretty;max-width:30ch}
+.lead{font-size:clamp(17px,1.3vw,19px);line-height:1.62;color:var(--fg-2);max-width:46ch;margin:0}
+.meta,.fine{margin:0;font-size:13px;line-height:1.55;letter-spacing:.01em;color:var(--meta)}
+.tag{display:inline-block;font-size:12px;line-height:1.5;letter-spacing:.02em;color:var(--meta);border:1px solid var(--hair-2);padding:1px 9px;border-radius:999px;white-space:nowrap}
 
-/* ---------- nav ---------- */
-.nav{position:fixed;inset:0 0 auto;z-index:50;padding:calc(env(safe-area-inset-top,0px) + 18px) clamp(20px,4vw,48px) 18px;transition:background-color .4s,border-color .4s;border-bottom:1px solid transparent}
-.nav.solid{background:rgba(12,11,10,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom-color:var(--hair)}
-.nav-in{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px}
-.logo{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-display);font-size:25px;text-decoration:none;justify-self:start;letter-spacing:.01em}
-.logo svg{display:block}
-.links{display:flex;gap:30px}
-.links a{text-decoration:none;font-size:13px;letter-spacing:.06em;color:var(--ivory-2);transition:color .2s}
-.links a:hover{color:var(--ivory)}
-.nav .btn{justify-self:end;min-height:40px;padding:0 20px;font-size:13px}
-@media (max-width:920px){.links{display:none}.nav-in{grid-template-columns:1fr auto}}
+/* ---------- buttons: one filled action, the rest are words ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 32px;border-radius:1px;font:500 15px/1 var(--f-body);letter-spacing:.02em;text-decoration:none;white-space:nowrap;border:1px solid var(--btn);background:var(--btn);color:var(--on-btn);transition:background-color .3s,color .3s,border-color .3s}
+.btn:hover{background:transparent;color:var(--fg)}
+.btn[disabled]{background:transparent;color:var(--meta);border-color:var(--hair-2);cursor:default}
+.btn-soft{background:transparent;color:var(--fg);border-color:transparent;padding-inline:4px;text-decoration:underline;text-decoration-color:var(--hair-2);text-underline-offset:6px;text-decoration-thickness:1px}
+.btn-soft:hover{text-decoration-color:currentColor}
 
-/* ---------- hero: the coin on silk, and one sentence ---------- */
-.hero{position:relative;min-height:100svh;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);background:var(--ink)}
-.hero-copy{display:grid;align-content:end;gap:26px;padding:120px clamp(20px,5vw,72px) clamp(48px,8vh,96px);max-width:780px;justify-self:end;width:100%}
-.hero-copy .lead{max-width:44ch}
-.hero h1{font-size:clamp(46px,5.5vw,86px);line-height:1}
-.hero-acts{display:flex;flex-wrap:wrap;gap:12px}
-.hero-fine{display:grid;gap:4px;margin:6px 0 0;font-size:13px;color:var(--mist)}
-.hero-photo{position:relative;margin:0;overflow:hidden;min-height:100svh}
-.hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:46% 48%}
-.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--ink) 0%,rgba(12,11,10,0) 22%),linear-gradient(0deg,rgba(12,11,10,.55),rgba(12,11,10,0) 30%);pointer-events:none}
-.hero-photo figcaption{position:absolute;right:clamp(20px,3vw,40px);bottom:24px;z-index:1;font-size:12px;color:var(--mist)}
+/* ---------- nav: links, a centred wordmark, one action ---------- */
+.nav{position:fixed;inset:0 0 auto;z-index:50;padding:calc(env(safe-area-inset-top,0px) + 20px) var(--pad) 20px;transition:background-color .5s,padding .5s;color:var(--ivory)}
+.nav.solid{background:var(--forest);box-shadow:0 1px 0 rgba(242,235,219,.08);padding-block:calc(env(safe-area-inset-top,0px) + 12px) 12px}
+.nav-in{max-width:1312px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px}
+.links{display:flex;gap:28px}
+.links a,.nav-cta{text-decoration:none;font-size:13px;letter-spacing:.02em;color:#C9C6B4;transition:color .2s}
+.links a:hover,.nav-cta:hover{color:var(--ivory)}
+.logo{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-display);font-size:26px;line-height:1;text-decoration:none;letter-spacing:.01em;color:inherit}
+.nav .logo{justify-self:center}
+.nav-cta{justify-self:end;color:var(--ivory);padding:10px 0;border-bottom:1px solid rgba(242,235,219,.4)}
+.nav-cta:hover{border-bottom-color:var(--ivory)}
+.nav :focus-visible{outline-color:var(--ivory)}
+@media (max-width:1040px){.links{display:none}.nav-in{grid-template-columns:auto 1fr}.nav .logo{justify-self:start}}
+
+/* ---------- hero: the coin in a round vitrine, and the ring that closes around it ---------- */
+.hero{position:relative;min-height:100svh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:clamp(32px,5vw,96px);padding:calc(120px + env(safe-area-inset-top,0px)) var(--pad) clamp(56px,8vh,104px);max-width:1440px;margin:0 auto}
+.hero-copy{display:grid;gap:28px;align-content:center;justify-items:start;max-width:640px}
+.hero h1{font-size:clamp(54px,7.4vw,118px);line-height:.94;letter-spacing:-.024em}
+.hero h1 span{display:block;white-space:nowrap}
+.hero .lead{max-width:40ch}
+.hero-acts{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center}
+.hero-fine{display:grid;gap:4px;margin:4px 0 0;font-size:13px;line-height:1.55;color:var(--meta);max-width:52ch}
+.medal{position:relative;margin:0;justify-self:center;width:min(100%,600px,68svh);display:grid;gap:18px}
+.medal-in{position:relative;aspect-ratio:1}
+.medal-ph{position:absolute;inset:6.5%;border-radius:50%;overflow:hidden;background:var(--lacquer)}
+.medal-ph img{width:100%;height:100%;object-fit:cover;object-position:52% 40%}
+.medal svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ring-track{fill:none;stroke:rgba(242,235,219,.16);stroke-width:.25}
+.ring-gilt{fill:none;stroke:var(--gilt);stroke-width:.36;stroke-linecap:round;stroke-dasharray:100 100;stroke-dashoffset:0}
+.ring-dot{fill:var(--gilt);opacity:0}
+.medal figcaption{justify-self:center;font-size:12px;color:var(--meta)}
 @media (prefers-reduced-motion:no-preference){
-  .hero-photo img{animation:settle 2.8s var(--ease) both}
-  .hero-copy > *{animation:rise 1.4s var(--ease) both}
-  .hero-copy > :nth-child(2){animation-delay:.12s}.hero-copy > :nth-child(3){animation-delay:.22s}.hero-copy > :nth-child(4){animation-delay:.3s}.hero-copy > :nth-child(5){animation-delay:.36s}
+  /* The page's one orchestrated moment: the photograph surfaces, the ring draws Givv's mark (an open ring and a
+     coin at its gap), holds, then closes. About three seconds, once. */
+  .medal-ph img{animation:surface 2.6s var(--ease) both}
+  .ring-gilt{animation:close 3.4s .5s both}
+  .ring-dot{animation:dot 3.4s .5s both}
+  .hero-copy > *{animation:fade 1.3s var(--ease) both}
+  .hero-copy > :nth-child(3){animation-delay:.15s}.hero-copy > :nth-child(n+4){animation-delay:.3s}
 }
-@keyframes settle{from{transform:scale(1.08);opacity:0}to{transform:none;opacity:1}}
-@keyframes rise{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
-@media (max-width:860px){
-  .hero{grid-template-columns:minmax(0,1fr)}
-  .hero-photo{order:-1;min-height:58svh}
-  .hero-photo::after{background:linear-gradient(0deg,var(--ink) 0%,rgba(12,11,10,0) 40%)}
-  .hero-copy{justify-self:stretch;padding-top:8px;align-content:start}
+@keyframes surface{from{opacity:0;transform:scale(1.07)}to{opacity:1;transform:none}}
+@keyframes close{0%{stroke-dashoffset:100;animation-timing-function:cubic-bezier(.45,0,.2,1)}48%{stroke-dashoffset:19.4}70%{stroke-dashoffset:19.4;animation-timing-function:cubic-bezier(.6,0,.2,1)}100%{stroke-dashoffset:0}}
+@keyframes dot{0%,40%{opacity:0;transform:scale(.4)}52%,70%{opacity:1;transform:none}92%,100%{opacity:0;transform:scale(.3)}}
+.ring-dot{transform-box:fill-box;transform-origin:center}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (max-width:880px){
+  .hero{grid-template-columns:minmax(0,1fr);padding-top:calc(92px + env(safe-area-inset-top,0px));gap:36px;align-items:start}
+  .medal{order:-1;width:min(86vw,440px)}
+  .hero-copy{gap:22px}
+  /* An invited visitor came to sign up: keep the medal small so the one-field form sits near the top. */
+  .hero:has(#invited:not([hidden])) .medal{width:min(52vw,230px)}
 }
-.invited{display:inline-flex;align-items:center;gap:10px;margin:0;padding:6px 16px 6px 6px;border-radius:999px;border:1px solid var(--hair-2);font-size:14px;justify-self:start}
-.invited i{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ivory);color:var(--ink);font-style:normal;font-weight:600}
-.invited span{display:grid;line-height:1.25}
-.invited small{color:var(--mist);font-size:12px}
-.wlq{display:grid;gap:10px;max-width:480px}
+.invited{display:inline-flex;align-items:center;gap:12px;margin:0;padding:6px 18px 6px 6px;border-radius:999px;border:1px solid var(--hair-2);font-size:14px;line-height:1.3}
+.invited i{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ivory);color:var(--forest);font:500 15px/1 var(--f-display);font-style:normal}
+.invited span{display:grid}
+.invited small{color:var(--meta);font-size:12px}
+.wlq{display:grid;gap:10px;width:100%;max-width:500px}
 .wlq .wl-msg:empty{display:none}
 .wlq-row{display:flex;flex-wrap:wrap;gap:10px}
 .wlq input{flex:1 1 220px;min-width:0}
 .wlq p{margin:0}
 
-/* ---------- the penny: one full-bleed photograph, one line ---------- */
-.liberty{position:relative;padding:0;min-height:max(100svh,640px);display:grid;align-items:end;overflow:hidden;isolation:isolate}
-.liberty img{position:absolute;inset:-6% 0;width:100%;height:112%;object-fit:cover;object-position:50% 50%;z-index:-2;transform:translateY(calc(var(--par,0) * 1px))}
-.liberty::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(70% 80% at 100% 100%,rgba(12,11,10,.88),rgba(12,11,10,0) 70%),linear-gradient(0deg,rgba(12,11,10,.75) 0%,rgba(12,11,10,0) 40%,rgba(12,11,10,0) 80%,rgba(12,11,10,.55) 100%)}
-.liberty .wrap{width:100%;padding-block:clamp(40px,6vw,72px);display:grid;gap:18px;justify-items:end}
-.liberty .wrap > *{width:min(430px,100%)}
-.liberty h2.disp{font-size:clamp(32px,3.2vw,46px)}
+/* ---------- plates: photographs placed like prints, captions beneath ---------- */
+.plate{margin:0;display:grid;gap:12px;align-content:start;min-width:0}
+.plate img{width:100%;height:100%;object-fit:cover}
+.plate figcaption{font-size:13px;line-height:1.5;color:var(--meta);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.plate figcaption b{font:400 19px/1.25 var(--f-display);color:var(--fg);letter-spacing:0}
+/* Quiet reveals: a plate or a block settles once as it arrives. Off without JavaScript and under reduced motion. */
+@media (prefers-reduced-motion:no-preference){
+  .js .rv{opacity:0;transform:translateY(22px);transition:opacity 1.2s var(--ease),transform 1.4s var(--ease)}
+  .js .rv.in{opacity:1;transform:none}
+}
 
-.liberty .lead{color:var(--ivory)}
-.credit{font-size:12px;color:var(--mist)}
+/* ---------- 2. the penny ---------- */
+.lib-h{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:36px clamp(16px,2vw,32px);margin-bottom:clamp(64px,8vw,120px)}
+.lib-h h2{grid-column:1 / span 10}
+.lib-h .lead{grid-column:8 / span 5}
+@media (max-width:860px){.lib-h h2,.lib-h .lead{grid-column:1 / -1}}
+.penny img{height:min(86svh,900px);min-height:420px;object-position:50% 46%}
+.penny figcaption{padding-inline:var(--pad)}
 
-/* ---------- the app ---------- */
-.app{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,7vw,120px);align-items:center}
-@media (max-width:900px){.app{grid-template-columns:minmax(0,1fr)}}
-.app-photo{margin:0;position:relative}
-.app-photo img{width:100%;height:auto;border-radius:2px}
-.app-photo figcaption{margin-top:14px;font-size:13px;color:var(--mist);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+/* ---------- 3. how it works ---------- */
+.how-h{display:grid;gap:26px;max-width:760px;margin-bottom:clamp(56px,7vw,104px)}
+.how{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(40px,7vw,128px);align-items:start}
+@media (max-width:900px){.how{grid-template-columns:minmax(0,1fr)}}
+.app-ph{position:sticky;top:110px}
+@media (max-width:900px){.app-ph{position:static}}
+.app-ph img{aspect-ratio:900/1088;height:auto}
 .steps{list-style:none;margin:0;padding:0;display:grid}
-.steps li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:4px 12px;padding:26px 0;border-top:1px solid var(--hair)}
+.steps li{display:grid;grid-template-columns:64px minmax(0,1fr);gap:6px 12px;padding:34px 0 36px;border-top:1px solid var(--hair)}
 .steps li:last-child{border-bottom:1px solid var(--hair)}
-.steps .n{grid-row:span 2;font-family:var(--f-display);font-size:22px;color:var(--copper);line-height:1.3}
-.steps h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:26px;line-height:1.2}
-.steps p{margin:6px 0 0;color:var(--ivory-2);font-size:16px;max-width:52ch}
+.steps .n{grid-row:span 2;font-family:var(--f-display);font-size:24px;line-height:1.25;color:var(--meta)}
+.steps h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(26px,2.3vw,34px);line-height:1.15;letter-spacing:-.01em}
+.steps p{margin:8px 0 0;color:var(--fg-2);max-width:48ch}
+/* The worked example: one coffee, set as a price card. */
+.example{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(40px,7vw,128px);align-items:end;margin-top:clamp(96px,12vw,184px)}
+@media (max-width:820px){.example{grid-template-columns:minmax(0,1fr)}}
+.cup img{aspect-ratio:2/3;height:auto}
+.ledger{display:grid;gap:30px;max-width:560px;padding-bottom:30px}
+.ledger h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(34px,3.6vw,54px);line-height:1.05;letter-spacing:-.015em}
+.ledger dl{margin:0;display:grid;border-top:1px solid var(--hair-2)}
+.ledger dl > div{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:16px 0;border-bottom:1px solid var(--hair)}
+.ledger dt{color:var(--fg-2)}
+.ledger dd{margin:0;font:400 26px/1 var(--f-display);font-variant-numeric:lining-nums tabular-nums}
+.ledger .sum{border-bottom-color:var(--hair-2)}
+.ledger .sum dt{color:var(--fg)}
+.ledger .sum dd{font-size:clamp(44px,4.4vw,64px);letter-spacing:-.02em}
 
-/* ---------- streak ---------- */
-.nets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 clamp(28px,4vw,64px)}
+/* ---------- 4. the year, in rings ---------- */
+.yr-h{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:28px clamp(16px,2vw,32px);align-items:end;margin-bottom:clamp(64px,8vw,112px)}
+.yr-h h2{grid-column:1 / span 7}
+.yr-h .lead{grid-column:9 / span 4}
+@media (max-width:860px){.yr-h h2,.yr-h .lead{grid-column:1 / -1}}
+.year{margin:0;display:grid;gap:28px}
+.rings{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(8px,1.6vw,26px)}
+@media (max-width:720px){.rings{grid-template-columns:repeat(6,minmax(0,1fr));row-gap:22px}}
+.rings li{display:grid;gap:10px;justify-items:center;font-size:12px;color:var(--meta)}
+.rings svg{width:100%;height:auto;display:block}
+.rings .tr{fill:none;stroke:var(--hair-2);stroke-width:1}
+.rings .gl{fill:none;stroke:var(--gilt);stroke-width:1.5;stroke-linecap:round;stroke-dasharray:var(--f) 100}
+.rings .now{color:var(--fg)}
+.year figcaption{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;color:var(--fg-2);font-size:15px}
+.year figcaption b{font:400 22px/1.2 var(--f-display);color:var(--gilt)}
+.nets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 clamp(28px,4vw,72px);margin-top:clamp(72px,9vw,128px)}
 @media (max-width:820px){.nets{grid-template-columns:minmax(0,1fr)}}
-.net{padding:26px 0;border-top:1px solid var(--hair);display:grid;gap:10px;align-content:start}
-.net b{font-family:var(--f-display);font-weight:400;font-size:24px;line-height:1.2}
-.net p{margin:0;color:var(--ivory-2);font-size:16px}
-.yr-sum{margin-top:40px;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;color:var(--ivory-2);font-size:15px}
-.yr-sum b{color:var(--copper);font-weight:500}
+.net{padding:30px 0;border-top:1px solid var(--hair);display:grid;gap:12px;align-content:start}
+.net h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:28px;line-height:1.15}
+.net p{margin:0;color:var(--fg-2)}
+.not-yet{margin:clamp(48px,6vw,80px) 0 0;max-width:30ch}
 
-/* ---------- causes ---------- */
-.missions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,260px));gap:10px}
-@media (max-width:860px){.missions{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:200px}}
-.mph{position:relative;margin:0;overflow:hidden;background:var(--ink-3);min-width:0;border-radius:2px}
-.mph.lg{grid-column:span 2;grid-row:span 2}
-.mph img{width:100%;height:100%;object-fit:cover;filter:saturate(.8) contrast(1.03) brightness(.88);transition:transform 1.4s var(--ease),filter .8s var(--ease)}
-.mph:hover img{transform:scale(1.025);filter:saturate(.95) brightness(.95)}
-.mph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,11,10,0) 55%,rgba(12,11,10,.7));pointer-events:none}
-.mph figcaption{position:absolute;left:18px;bottom:14px;z-index:1;font-family:var(--f-display);font-size:20px}
-.mph.lg figcaption{font-size:30px;left:24px;bottom:20px}
-.rep{position:absolute;left:14px;top:14px;z-index:1;font-size:11px;letter-spacing:.04em;color:var(--ivory);background:rgba(12,11,10,.55);backdrop-filter:blur(6px);border-radius:999px;padding:3px 10px}
-.qual{margin:18px 0 0;font-size:13px;line-height:1.6;color:var(--mist);max-width:80ch}
-.qual b{font-weight:500;color:var(--ivory-2)}
-@media (prefers-reduced-motion:reduce){.mph img{transition:none}.mph:hover img{transform:none}}
+/* ---------- 5. causes: plates of different sizes, never an even grid ---------- */
+.ca-h{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:28px clamp(16px,2vw,32px);margin-bottom:clamp(56px,7vw,104px)}
+.ca-h h2{grid-column:1 / span 6}
+.ca-h .lead{grid-column:8 / span 5;align-self:end}
+@media (max-width:860px){.ca-h h2,.ca-h .lead{grid-column:1 / -1}}
+.rep-note{margin:0 0 18px}
+.missions{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(40px,5vw,72px) clamp(16px,2vw,32px)}
+.missions .plate img{height:auto}
+.m1{grid-column:1 / span 7}.m1 img{aspect-ratio:7/5}
+.m2{grid-column:9 / span 4;align-self:end}.m2 img{aspect-ratio:4/5}
+.m3{grid-column:2 / span 3}.m3 img{aspect-ratio:3/4;object-position:50% 35%}
+.m4{grid-column:6 / span 4;margin-top:clamp(40px,8vw,120px)}.m4 img{aspect-ratio:4/3}
+.m5{grid-column:10 / span 3}.m5 img{aspect-ratio:3/4}
+@media (max-width:760px){
+  .missions{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 14px}
+  .m1{grid-column:1 / -1}.m2,.m3,.m4,.m5{grid-column:auto;margin-top:0;align-self:start}
+  .m2 img,.m3 img,.m4 img,.m5 img{aspect-ratio:4/5}
+}
+.qual{margin:clamp(48px,6vw,80px) 0 0;max-width:78ch}
+.qual b{font-weight:500;color:var(--fg-2)}
 
-/* ---------- trust: the open hands ---------- */
-.hands{padding-bottom:0}
-.hands .wrap{display:grid;gap:22px;margin-bottom:clamp(40px,5vw,72px)}
-.hands-ph{margin:0;position:relative}
-.hands-ph img{width:100%;height:min(78vh,820px);object-fit:cover;object-position:56% 50%}
-.hands-ph figcaption{position:absolute;right:clamp(20px,3vw,40px);bottom:20px;font-size:12px;color:var(--mist)}
-.trust{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(32px,5vw,80px)}
-@media (max-width:760px){.trust{grid-template-columns:minmax(0,1fr)}}
-.fact{padding:28px 0;border-top:1px solid var(--hair);display:grid;gap:10px;align-content:start}
-.fact h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:26px;line-height:1.2}
-.fact p{margin:0;color:var(--ivory-2);font-size:16px}
-.sources{margin-top:clamp(56px,7vw,96px);display:grid;gap:24px}
-.sources h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:30px}
-.src{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 24px;list-style:none;margin:0;padding:0}
-@media (max-width:900px){.src{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:440px){.src{grid-template-columns:minmax(0,1fr)}}
-.src li{padding:16px 0;border-top:1px solid var(--hair);display:grid;gap:4px}
-.src b{font-weight:500;font-size:15px}
-.src span{font-size:13px;color:var(--mist);line-height:1.55}
-.rules{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 clamp(28px,4vw,64px)}
-@media (max-width:820px){.rules{grid-template-columns:minmax(0,1fr)}}
-.rules li{padding:24px 0;border-top:1px solid var(--hair);display:grid;gap:8px}
-.rules b{font-family:var(--f-display);font-weight:400;font-size:23px}
-.rules span{color:var(--ivory-2);font-size:16px}
+/* ---------- 6. trust ---------- */
+.tr-h{display:grid;gap:26px;max-width:860px;margin-bottom:clamp(56px,7vw,96px)}
+.hands{position:relative;margin:0}
+.hands img{width:100%;height:min(80svh,840px);min-height:360px;object-fit:cover;object-position:58% 50%}
+.hands::before,.hands::after{content:"";position:absolute;left:0;right:0;height:22%;pointer-events:none}
+.hands::before{top:0;background:linear-gradient(var(--forest),rgba(11,29,21,0))}
+.hands::after{bottom:0;background:linear-gradient(rgba(11,29,21,0),var(--forest))}
+@media (max-width:700px){.hands img{height:58svh;min-height:300px;object-position:64% 50%}}
+.hands figcaption{position:absolute;right:var(--pad);bottom:16px;z-index:1;font-size:12px;color:var(--meta)}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(32px,6vw,112px);margin-top:clamp(56px,7vw,104px)}
+@media (max-width:760px){.facts{grid-template-columns:minmax(0,1fr)}}
+.fact{padding:32px 0;border-top:1px solid var(--hair);display:grid;gap:12px;align-content:start}
+.fact h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(26px,2.3vw,32px);line-height:1.15}
+.fact p{margin:0;color:var(--fg-2);max-width:50ch}
+.sources{margin-top:clamp(96px,11vw,168px);display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:32px clamp(32px,6vw,112px)}
+@media (max-width:860px){.sources{grid-template-columns:minmax(0,1fr)}}
+.sources h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(32px,3.2vw,46px);line-height:1.08;letter-spacing:-.012em}
+.src{list-style:none;margin:0;padding:0;display:grid;border-bottom:1px solid var(--hair)}
+.src li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 32px;align-items:baseline;padding:22px 0;border-top:1px solid var(--hair)}
+@media (max-width:560px){.src li{grid-template-columns:minmax(0,1fr)}}
+.src b{font:400 clamp(24px,2.2vw,30px)/1.15 var(--f-display)}
+.src span{color:var(--fg-2)}
+.sources .fine{margin-top:18px}
 
-/* ---------- charities ---------- */
-.char{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px clamp(40px,7vw,120px);align-items:center}
+/* ---------- 7. charities ---------- */
+.char{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:48px clamp(40px,7vw,128px);align-items:center}
 @media (max-width:820px){.char{grid-template-columns:minmax(0,1fr)}}
-.char ul{list-style:none;margin:28px 0 36px;padding:0;display:grid;font-size:16px;color:var(--ivory-2)}
-.char li{padding:13px 0;border-top:1px solid var(--hair)}
-.char-ph{margin:0;position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px}
-.char-ph img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:saturate(.8) brightness(.9)}
-.char-ph figcaption{position:absolute;left:14px;bottom:14px;right:14px;font-size:12px;line-height:1.4;color:var(--ivory);text-shadow:0 1px 8px rgba(0,0,0,.6)}
-.char-ph figcaption span{display:block;color:var(--ivory-2)}
+.char ul{list-style:none;margin:40px 0 44px;padding:0;display:grid;color:var(--fg-2)}
+.char li{padding:15px 0;border-top:1px solid var(--hair)}
+.char li:last-child{border-bottom:1px solid var(--hair)}
+#ch-h{font-size:clamp(44px,4.9vw,74px)}
+.char-ph img{aspect-ratio:4/5;height:auto;object-position:50% 40%}
 
-/* ---------- faq ---------- */
-.faq{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(32px,6vw,112px)}
+/* ---------- 8. questions ---------- */
+.faq{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:40px clamp(32px,6vw,112px)}
 @media (max-width:860px){.faq{grid-template-columns:minmax(0,1fr)}}
-.qs{border-top:1px solid var(--hair)}
-details{border-bottom:1px solid var(--hair)}
-summary{list-style:none;cursor:pointer;padding:24px 0;font-family:var(--f-display);font-size:22px;display:flex;justify-content:space-between;gap:20px;align-items:center}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font:300 24px/1 var(--f-body);color:var(--mist);transition:transform .3s var(--ease)}
-details[open] summary::after{transform:rotate(45deg)}
-details p{margin:0;padding:0 0 26px;color:var(--ivory-2);max-width:62ch}
+.faq-h{align-self:start;position:sticky;top:120px}
+@media (max-width:860px){.faq-h{position:static}}
+.qs{border-top:1px solid var(--hair-2)}
+.qs details{border-bottom:1px solid var(--hair)}
+.qs summary{list-style:none;cursor:pointer;padding:26px 0;font-family:var(--f-display);font-size:clamp(21px,1.9vw,26px);line-height:1.25;display:flex;justify-content:space-between;gap:24px;align-items:center}
+.qs summary::-webkit-details-marker{display:none}
+.qs summary::after{content:"";flex:none;width:13px;height:13px;background:linear-gradient(currentColor,currentColor) center/100% 1px no-repeat,linear-gradient(currentColor,currentColor) center/1px 100% no-repeat;color:var(--meta);transition:transform .35s var(--ease)}
+.qs details[open] summary::after{transform:rotate(45deg)}
+.qs details p{margin:0;padding:0 0 30px;color:var(--fg-2);max-width:60ch}
 
-/* ---------- waitlist ---------- */
-.access{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(32px,6vw,96px);align-items:start}
+/* ---------- 9. waitlist ---------- */
+.join-h{display:grid;gap:26px;max-width:900px;margin-bottom:clamp(56px,7vw,96px)}
+.access{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px clamp(40px,7vw,128px);align-items:start}
 @media (max-width:860px){.access{grid-template-columns:minmax(0,1fr)}}
-.wl{display:grid;gap:22px;align-content:start}
-.wl-role{border:0;margin:0;padding:0;display:flex;gap:28px}
+.wl{display:grid;gap:26px;align-content:start}
+.wl-role{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 32px}
 .wl-role label{position:relative}
-.wl-role input{position:absolute;opacity:0;inset:0;cursor:pointer}
-.wl-role span{display:inline-block;padding:10px 0;font-size:15px;color:var(--mist);border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
-.wl-role input:checked + span{color:var(--ivory);border-bottom-color:var(--ivory)}
-.wl-role input:focus-visible + span{outline:1px solid var(--ivory);outline-offset:4px}
+.wl-role input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+.wl-role span{display:inline-block;padding:10px 0;font-size:16px;color:var(--meta);border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.wl-role input:checked + span{color:var(--fg);border-bottom-color:var(--fg)}
+.wl-role input:focus-visible + span{outline:2px solid var(--fg);outline-offset:4px}
 .f{display:grid;gap:6px}
-.f label{font-size:13px;letter-spacing:.04em;color:var(--mist)}
-.f input,.wlq input{height:50px;border:0;border-bottom:1px solid var(--hair-2);border-radius:0;background:transparent;color:var(--ivory);padding:0 2px;font:300 18px var(--f-body);transition:border-color .2s}
-.f input::placeholder,.wlq input::placeholder{color:#6F6A60}
-.f input:focus,.wlq input:focus{outline:none;border-bottom-color:var(--ivory)}
-.wlq input{border:1px solid var(--hair-2);padding:0 14px;font-size:16px}
-input[aria-invalid=true]{border-color:#E39A88!important}
-.chk{display:flex;gap:10px;align-items:center;font-size:15px;color:var(--ivory-2)}
-.chk input{width:18px;height:18px;accent-color:var(--ivory)}
+.f label{font-size:13px;letter-spacing:.01em;color:var(--meta)}
+.f input,.wlq input{height:54px;border:0;border-bottom:1px solid var(--hair-2);border-radius:0;background:transparent;color:var(--fg);padding:0 2px;font:400 19px var(--f-body);transition:border-color .2s}
+.f input::placeholder,.wlq input::placeholder{color:#8C8F80}
+.f input:focus,.wlq input:focus{outline:none;border-bottom-color:var(--fg)}
+.f input:focus-visible,.wlq input:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+.wlq input{border:1px solid var(--hair-2);padding:0 16px;font-size:17px}
+input[aria-invalid=true]{border-color:var(--err)!important}
+.chk{display:flex;gap:12px;align-items:center;font-size:16px;color:var(--fg-2)}
+.chk input{width:18px;height:18px;margin:0;accent-color:var(--ivory)}
 .wl .btn{justify-self:start}
-.wl-msg{margin:0;font-size:15px;color:var(--ivory);min-height:1.4em}
-.wl-msg.err{color:#F0A08F}
-.side{display:grid;gap:14px;align-content:start;padding-top:8px;border-top:1px solid var(--hair)}
-.side h3{margin:14px 0 0;font-family:var(--f-display);font-weight:400;font-size:28px}
-.side p{margin:0;color:var(--ivory-2)}
+.wl-msg{margin:0;font-size:16px;color:var(--fg);min-height:1.5em}
+.wl-msg.err{color:var(--err)}
+.side{display:grid;gap:16px;align-content:start;padding-top:26px;border-top:1px solid var(--hair)}
+.side h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1.15}
+.side p{margin:0;color:var(--fg-2)}
+.side .fine{color:var(--meta)}
 .owner{border-top:1px solid var(--hair);padding-top:14px;display:grid;gap:10px}
 .owner-h{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.owner-h span{color:var(--mist);font-size:14px}
-.owner-copy{margin-left:auto;font-size:13px;color:var(--ivory);padding:6px 12px;border:1px solid var(--hair-2)}
+.owner-h span{color:var(--meta);font-size:14px}
+.owner-copy{margin-left:auto;font-size:13px;color:var(--fg);padding:6px 12px;border:1px solid var(--hair-2)}
 .owner ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:220px;overflow:auto;font-size:14px;overflow-wrap:anywhere}
-.owner small{color:var(--mist)}
+.owner small{color:var(--meta)}
 
 /* ---------- footer ---------- */
-.foot{padding-block:64px 80px;border-top:1px solid var(--hair);display:grid;gap:24px}
-.foot-row{display:flex;flex-wrap:wrap;gap:12px 40px;justify-content:space-between;font-size:13px;color:var(--mist)}
+.foot{padding-block:clamp(72px,9vw,128px) 80px;border-top:1px solid var(--hair);display:grid;gap:28px}
+.foot .logo{font-size:40px;justify-self:start}
+.foot-row{display:flex;flex-wrap:wrap;gap:14px 48px;justify-content:space-between;font-size:13px;line-height:1.6;color:var(--meta)}
 .foot-row p{margin:0;max-width:72ch}
-.credits{font-size:13px;color:var(--mist);border:0}
-.credits summary{font:400 13px var(--f-body);padding:0}
-.credits summary::after{display:none}
-.credits ul{margin:8px 0 0;padding-left:18px;display:grid;gap:2px}
-@media (max-width:420px){.wlq .btn,.hero-acts .btn{flex:1 1 100%}}
+.credits{font-size:13px;color:var(--meta)}
+.credits summary{cursor:pointer;display:inline-block;padding:6px 0;text-decoration:underline;text-decoration-color:var(--hair-2);text-underline-offset:5px}
+.credits ul{margin:10px 0 0;padding-left:18px;display:grid;gap:2px}
+@media (max-width:420px){.wlq .btn,.hero-acts .btn,.wl .btn{flex:1 1 100%;width:100%}}
 </style>
 
+<a class="skip" href="#top">Skip to content</a>
 <nav class="nav" id="nav" aria-label="Main">
   <div class="nav-in">
-    <a class="logo" href="#top" aria-label="Givv home"><svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8A16 16 0 1 1 8.96 18.53" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><circle cx="14.82" cy="10.89" r="3" fill="#C99267"/></svg>givv</a>
     <div class="links"><a href="#how">How it works</a><a href="#streak">The streak</a><a href="#trust">Your money</a><a href="#charities">Charities</a><a href="#faq">Questions</a></div>
-    <a class="btn btn-sage" href="#join">Join the waitlist</a>
+    <a class="logo" href="#top" aria-label="Givv home"><svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8A16 16 0 1 1 8.96 18.53" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><circle cx="14.82" cy="10.89" r="3" fill="#C9A15E"/></svg>givv</a>
+    <a class="nav-cta" href="#join">Join the waitlist</a>
   </div>
 </nav>
 
 <main id="top">
-  <header class="hero">
-    <div class="hero-copy">
-      <p class="invited" id="invited" hidden><i aria-hidden="true"></i><span></span></p>
-      <h1 class="disp">Set your spare change free.</h1>
-      <p class="lead">Every purchase sets aside its spare change, plus a buck. Once a month you give it to a charity you love, on their own donation page. One ring a month. Close it and your streak grows.</p>
-      <form class="wlq" id="wlq" novalidate hidden>
-        <div class="wlq-row">
-          <label class="sr" for="wlq-email">Email</label>
-          <input id="wlq-email" type="email" required autocomplete="email" placeholder="you@example.com">
-          <button class="btn btn-sage" type="submit" id="wlq-btn">Join the waitlist</button>
+  <header class="forest">
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="invited" id="invited" hidden><i aria-hidden="true"></i><span></span></p>
+        <h1 class="disp"><span>Set your</span> <span>spare change</span> <span>free.</span></h1>
+        <p class="lead">Every purchase sets aside its spare change, plus a buck. Once a month you give it to a charity you love, on their own donation page. One ring a month. Close it and your streak grows.</p>
+        <form class="wlq" id="wlq" novalidate hidden>
+          <div class="wlq-row">
+            <label class="sr" for="wlq-email">Email</label>
+            <input id="wlq-email" type="email" required autocomplete="email" placeholder="you@example.com">
+            <button class="btn btn-sage" type="submit" id="wlq-btn">Join the waitlist</button>
+          </div>
+          <p class="fine" id="wlq-note"></p>
+          <p class="wl-msg" id="wlq-msg" role="status" aria-live="polite"></p>
+        </form>
+        <div class="hero-acts" id="hero-acts">
+          <a class="btn btn-sage" href="#join">Join the waitlist</a>
+          <a class="btn btn-soft" href="#how">See how it works</a>
         </div>
-        <p class="fine" id="wlq-note"></p>
-        <p class="wl-msg" id="wlq-msg" role="status" aria-live="polite"></p>
-      </form>
-      <div class="hero-acts" id="hero-acts">
-        <a class="btn btn-sage" href="#join">Join the waitlist</a>
-        <a class="btn btn-soft" href="#how">See how it works</a>
+        <p class="hero-fine"><span>Read-only. We see amounts, never card numbers.</span><span>For iPhone. In private beta. First month free, then $2.99 a month through Apple, none of it from your gifts.</span></p>
       </div>
-      <p class="hero-fine"><span>Read-only. We see amounts, never card numbers.</span><span>For iPhone. In private beta. First month free, then $2.99 a month through Apple, none of it from your gifts.</span></p>
+      <figure class="medal">
+        <div class="medal-in">
+          <div class="medal-ph"><img src="img/lux/coin-silk-1000.webp" srcset="img/lux/coin-silk-1000.webp 1000w, img/lux/coin-silk-1800.webp 1800w" sizes="(max-width:880px) 86vw, 600px" alt="A single coin resting on folds of silk in a band of light" fetchpriority="high"></div>
+          <!-- Givv's mark at the scale of the photograph: the ring draws open with the coin at its gap, then closes. -->
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="ring-track" cx="50" cy="50" r="49"/>
+            <circle class="ring-gilt" cx="50" cy="50" r="49" pathLength="100" transform="rotate(-90 50 50)"/>
+            <circle class="ring-dot" cx="21.9" cy="9.86" r="1.1"/>
+          </svg>
+        </div>
+        <figcaption>Photo: Diego Alejandro López</figcaption>
+      </figure>
     </div>
-    <figure class="hero-photo">
-      <img src="img/lux/coin-silk-1000.webp" srcset="img/lux/coin-silk-1000.webp 1000w, img/lux/coin-silk-1800.webp 1800w" sizes="(max-width:860px) 100vw, 50vw" alt="A single coin resting on folds of silk in a band of light" fetchpriority="high">
-      <figcaption>Photo: Diego Alejandro López</figcaption>
-    </figure>
   </header>
 
-  <section class="liberty" aria-labelledby="lib-h">
-    <img src="img/lux/liberty-1400.webp" srcset="img/lux/liberty-1400.webp 1400w, img/lux/liberty-2400.webp 2400w" sizes="100vw" alt="Macro photograph of a penny, the word LIBERTY across its copper face" loading="lazy" id="liberty-img">
-    <div class="wrap">
+  <section class="stone ch" aria-labelledby="lib-h">
+    <div class="wrap lib-h">
       <h2 class="disp" id="lib-h">Spare change, set loose on something real.</h2>
       <p class="lead">Food banks, shelters, rescues, schools, clean water. You choose the cause. Givv takes nothing: your gift goes straight to the charity, on their own page.</p>
-      <p class="credit">Photo: Todd Trapani</p>
     </div>
+    <figure class="plate penny rv">
+      <img src="img/lux/liberty-1400.webp" srcset="img/lux/liberty-1400.webp 1400w, img/lux/liberty-2400.webp 2400w" sizes="100vw" alt="Macro photograph of a penny, the word LIBERTY across its copper face" loading="lazy">
+      <figcaption>Photo: Todd Trapani</figcaption>
+    </figure>
   </section>
 
-  <section id="how" aria-labelledby="how-h">
-    <div class="wrap app">
-      <figure class="app-photo">
-        <img src="img/lux/app-today-900.webp" srcset="img/lux/app-today-900.webp 900w, img/lux/app-today-1600.webp 1600w" sizes="(max-width:900px) 100vw, 44vw" alt="A hand holding an iPhone showing Givv's Today screen: September, 75 meals for Riverside, 8 months in a row, and a button to give 75 meals to Riverside" loading="lazy">
-        <figcaption><span class="tag">Sample</span>Givv’s Today screen with a sample charity. Photo: Luis Quintero.</figcaption>
-      </figure>
-      <div>
-        <div class="sec-h" style="margin-bottom:40px">
-          <h2 class="disp" id="how-h">One ring a month.</h2>
-          <p class="lead">Every month gets a ring. Purchases fill it in meals for your cause, and the gift closes it. The dollars are always exact, one line underneath.</p>
-        </div>
+  <section class="stone ch" id="how" aria-labelledby="how-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="how-h">
+        <h2 class="disp" id="how-h">One ring a month.</h2>
+        <p class="statement">Every month gets a ring. Purchases fill it in meals for your cause, and the gift closes it. The dollars are always exact, one line underneath.</p>
+      </div>
+      <div class="how">
+        <figure class="plate app-ph rv">
+          <img src="img/lux/app-today-900.webp" srcset="img/lux/app-today-900.webp 900w, img/lux/app-today-1600.webp 1600w" sizes="(max-width:900px) 100vw, 42vw" alt="A hand holding an iPhone showing Givv's Today screen: September, 75 meals for Riverside, 8 months in a row, and a button to give 75 meals to Riverside" loading="lazy">
+          <figcaption><span class="tag">Sample</span><span>Givv’s Today screen with a sample charity. Photo: Luis Quintero.</span></figcaption>
+        </figure>
         <ol class="steps">
           <li><span class="n" aria-hidden="true">I</span><h3>Shop like normal.</h3><p>Each purchase that reaches Givv counts its change to the next dollar, plus a flat Round Up+ of $1, $2, $5 or $10. A $4.35 coffee sets aside $1.65. Apple Pay taps arrive through a Shortcuts automation you set up.</p></li>
           <li><span class="n" aria-hidden="true">II</span><h3>Watch the ring fill.</h3><p>About 33¢ a meal at Riverside, a sample charity. The tally shows as meals for your charity, up to a monthly cap you choose. Follow up to three causes.</p></li>
@@ -314,55 +397,85 @@ input[aria-invalid=true]{border-color:#E39A88!important}
           <li><span class="n" aria-hidden="true">IV</span><h3>Open your month.</h3><p>It arrives sealed. Pull the strip, the ring closes, and your streak counts one more.</p></li>
         </ol>
       </div>
+      <div class="example">
+        <figure class="plate cup rv">
+          <img src="img/lux/cup-900.webp" srcset="img/lux/cup-900.webp 900w, img/lux/cup-1600.webp 1600w" sizes="(max-width:820px) 100vw, 34vw" alt="A small ceramic cup of coffee on a white table, casting a long shadow in morning light" loading="lazy">
+          <figcaption>Photo: Mathilde Langevin</figcaption>
+        </figure>
+        <div class="ledger rv">
+          <h3>A $4.35 coffee.</h3>
+          <dl>
+            <div><dt>Change to the next dollar</dt><dd>65¢</dd></div>
+            <div><dt>Round Up+</dt><dd>$1.00</dd></div>
+            <div class="sum"><dt>Set aside for your charity</dt><dd>$1.65</dd></div>
+          </dl>
+          <p class="fine">Round Up+ is $1 unless you choose $2, $5 or $10.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section id="streak" aria-labelledby="st-h" style="padding-top:0">
+  <section class="forest ch" id="streak" aria-labelledby="st-h">
     <div class="wrap">
-      <div class="sec-h">
+      <div class="yr-h">
         <h2 class="disp" id="st-h">Twelve rings make your year.</h2>
         <p class="lead">Each closed month keeps its meals, and the total since you joined never resets. And the streak comes with a safety net.</p>
       </div>
+      <figure class="year rv">
+        <ol class="rings" aria-label="A sample year: January to August closed, September filling, October to December to come">
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/><circle class="gl" cx="22" cy="22" r="20" pathLength="100" transform="rotate(-90 22 22)" style="--f:100"/></svg>Jan</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/><circle class="gl" cx="22" cy="22" r="20" pathLength="100" transform="rotate(-90 22 22)" style="--f:100"/></svg>Feb</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/><circle class="gl" cx="22" cy="22" r="20" pathLength="100" transform="rotate(-90 22 22)" style="--f:100"/></svg>Mar</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/><circle class="gl" cx="22" cy="22" r="20" pathLength="100" transform="rotate(-90 22 22)" style="--f:100"/></svg>Apr</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/><circle class="gl" cx="22" cy="22" r="20" pathLength="100" transform="rotate(-90 22 22)" style="--f:100"/></svg>May</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/><circle class="gl" cx="22" cy="22" r="20" pathLength="100" transform="rotate(-90 22 22)" style="--f:100"/></svg>Jun</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/><circle class="gl" cx="22" cy="22" r="20" pathLength="100" transform="rotate(-90 22 22)" style="--f:100"/></svg>Jul</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/><circle class="gl" cx="22" cy="22" r="20" pathLength="100" transform="rotate(-90 22 22)" style="--f:100"/></svg>Aug</li>
+          <li class="now"><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/><circle class="gl" cx="22" cy="22" r="20" pathLength="100" transform="rotate(-90 22 22)" style="--f:58;opacity:.7"/></svg>Sep</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/></svg>Oct</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/></svg>Nov</li>
+          <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="tr" cx="22" cy="22" r="20"/></svg>Dec</li>
+        </ol>
+        <figcaption><span><b>552 meals</b> given to Riverside since January</span><span class="tag">Sample</span></figcaption>
+      </figure>
       <div class="nets">
-        <div class="net"><b>A week of grace</b><p>Give day is the 1st, the 15th or the last day of the month. Your month counts until 11:59pm seven days later.</p></div>
-        <div class="net"><b>Take a month off</b><p>Pause any month before its Give day. It isn’t counted, isn’t missed, and gets no reminders.</p></div>
-        <div class="net"><b>Give Day Shield</b><p>One per quarter. If a week of grace ends without a gift, the Shield holds your streak automatically.</p></div>
+        <div class="net"><h3>A week of grace</h3><p>Give day is the 1st, the 15th or the last day of the month. Your month counts until 11:59pm seven days later.</p></div>
+        <div class="net"><h3>Take a month off</h3><p>Pause any month before its Give day. It isn’t counted, isn’t missed, and gets no reminders.</p></div>
+        <div class="net"><h3>Give Day Shield</h3><p>One per quarter. If a week of grace ends without a gift, the Shield holds your streak automatically.</p></div>
       </div>
-      <div class="yr-sum"><span><b>552 meals</b> given to Riverside since January</span><span class="tag">Sample</span><span>“Not yet” costs nothing. Givv celebrates finishing the month, never the size of the gift.</span></div>
+      <p class="statement not-yet">“Not yet” costs nothing. Givv celebrates finishing the month, never the size of the gift.</p>
     </div>
   </section>
 
-  <section id="causes" aria-labelledby="ca-h" style="padding-top:0">
+  <section class="stone ch" id="causes" aria-labelledby="ca-h">
     <div class="wrap">
-      <div class="sec-h">
+      <div class="ca-h">
         <h2 class="disp" id="ca-h">You choose the cause.</h2>
         <p class="lead">When a month closes you can share it. The card is built to make your cause look good: no dollars, no names, just the charity, the meals and your streak, with an invite link for friends. Only when you tap Share; Givv never posts anything for you.</p>
       </div>
+      <p class="meta rep-note">Representative photography</p>
       <div class="missions">
-        <figure class="mph lg"><img src="img/photos/fresh-food.webp" alt="A grower holding a basket of fresh vegetables in a garden" loading="lazy"><span class="rep">Representative photography</span><figcaption>Fresh food</figcaption></figure>
-        <figure class="mph"><img src="img/photos/hot-meal.webp" alt="A volunteer ladling a warm meal from a large pot" loading="lazy"><figcaption>A hot meal</figcaption></figure>
-        <figure class="mph"><img src="img/photos/second-chance.webp" alt="A woman hugging a dog" loading="lazy" style="object-position:50% 35%"><figcaption>A second chance</figcaption></figure>
-        <figure class="mph"><img src="img/photos/kids-outdoors.webp" alt="Two children looking at woodland plants with a magnifying glass" loading="lazy"><figcaption>Kids outdoors</figcaption></figure>
-        <figure class="mph"><img src="img/photos/clean-water.webp" alt="Hands catching water from a pump" loading="lazy"><figcaption>Clean water</figcaption></figure>
+        <figure class="plate m1 rv"><img src="img/photos/fresh-food.webp" alt="A grower holding a basket of fresh vegetables in a garden" loading="lazy"><figcaption><b>Fresh food</b></figcaption></figure>
+        <figure class="plate m2 rv"><img src="img/photos/hot-meal.webp" alt="A volunteer ladling a warm meal from a large pot" loading="lazy"><figcaption><b>A hot meal</b></figcaption></figure>
+        <figure class="plate m3 rv"><img src="img/photos/second-chance.webp" alt="A woman hugging a dog" loading="lazy"><figcaption><b>A second chance</b></figcaption></figure>
+        <figure class="plate m4 rv"><img src="img/photos/kids-outdoors.webp" alt="Two children looking at woodland plants with a magnifying glass" loading="lazy"><figcaption><b>Kids outdoors</b></figcaption></figure>
+        <figure class="plate m5 rv"><img src="img/photos/clean-water.webp" alt="Hands catching water from a pump" loading="lazy"><figcaption><b>Clean water</b></figcaption></figure>
       </div>
-      <p class="qual"><b>Representative photography.</b> These photos show kinds of work, not any charity’s programs, and no partnership is implied. Fresh food and A hot meal: RDNE Stock project. A second chance: cottonbro studio. Kids outdoors: KATRIN BOLOVTSOVA. Clean water: K. All via Pexels, from FIG’s mission photography.</p>
+      <p class="meta qual"><b>Representative photography.</b> These photos show kinds of work, not any charity’s programs, and no partnership is implied. Fresh food and A hot meal: RDNE Stock project. A second chance: cottonbro studio. Kids outdoors: KATRIN BOLOVTSOVA. Clean water: K. All via Pexels, from FIG’s mission photography.</p>
     </div>
   </section>
 
-  <section class="hands" id="trust" aria-labelledby="tr-h">
-    <div class="wrap">
+  <section class="forest ch" id="trust" aria-labelledby="tr-h">
+    <div class="wrap"><div class="tr-h">
       <h2 class="disp" id="tr-h">Givv never touches your money.</h2>
-      <p class="lead">It counts, reminds and celebrates. The giving happens between you and your charity.</p>
-    </div>
-    <figure class="hands-ph">
+      <p class="statement">It counts, reminds and celebrates. The giving happens between you and your charity.</p>
+    </div></div>
+    <figure class="hands rv">
       <img src="img/lux/open-hands-1400.webp" srcset="img/lux/open-hands-1400.webp 1400w, img/lux/open-hands-2400.webp 2400w" sizes="100vw" alt="Two open hands, palms up, against black" loading="lazy">
       <figcaption>Photo: Kindel Media</figcaption>
     </figure>
-  </section>
-
-  <section aria-label="How Givv handles your money">
     <div class="wrap">
-      <div class="trust">
+      <div class="facts">
         <div class="fact"><h3>Your gift goes straight to the charity</h3><p>You give on the charity’s own donation page, and Givv takes nothing. They send your tax receipt.</p></div>
         <div class="fact"><h3>No card numbers, no bank logins</h3><p>For each purchase, Givv keeps the store name, amount and date, encrypted in its ledger so your tally is right on every device. It can’t move money.</p></div>
         <div class="fact"><h3>No cut of your gifts</h3><p>Givv is a membership through Apple: $2.99 a month or $24.99 a year, first month free. None of it comes out of what you give.</p></div>
@@ -370,19 +483,21 @@ input[aria-invalid=true]{border-color:#E39A88!important}
       </div>
       <div class="sources">
         <h3>Five ways to count your purchases</h3>
-        <ul class="src">
-          <li><b>Apple Pay taps</b><span>A Shortcuts automation sends each tap to Givv.</span></li>
-          <li><b>Bank alert emails</b><span>Forward your bank’s purchase alerts.</span></li>
-          <li><b>Your statement</b><span>Import it once a month for an exact total.</span></li>
-          <li><b>Apple Card</b><span>Through Apple’s own permission screen.</span></li>
-          <li><b>SimpleFIN Bridge</b><span>Connect accounts through SimpleFIN.</span></li>
-        </ul>
-        <p class="fine">Use one or several. When the same purchase arrives from two sources, Givv tries to count it once.</p>
+        <div>
+          <ul class="src">
+            <li><b>Apple Pay taps</b><span>A Shortcuts automation sends each tap to Givv.</span></li>
+            <li><b>Bank alert emails</b><span>Forward your bank’s purchase alerts.</span></li>
+            <li><b>Your statement</b><span>Import it once a month for an exact total.</span></li>
+            <li><b>Apple Card</b><span>Through Apple’s own permission screen.</span></li>
+            <li><b>SimpleFIN Bridge</b><span>Connect accounts through SimpleFIN.</span></li>
+          </ul>
+          <p class="fine">Use one or several. When the same purchase arrives from two sources, Givv tries to count it once.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="charities" aria-labelledby="ch-h" style="padding-top:0">
+  <section class="stone ch" id="charities" aria-labelledby="ch-h">
     <div class="wrap char">
       <div>
         <h2 class="disp" id="ch-h">Turn once‑a‑year donors into monthly ones.</h2>
@@ -394,13 +509,13 @@ input[aria-invalid=true]{border-color:#E39A88!important}
         </ul>
         <a class="btn btn-sage" href="#join" data-join-as="charity">Apply as a launch partner</a>
       </div>
-      <figure class="char-ph"><img src="img/photos/volunteers.webp" alt="Volunteers in matching shirts after cleaning up a neighborhood park" loading="lazy"><figcaption>Representative photography<span>Photo: Vitaly Gariev / Pexels</span></figcaption></figure>
+      <figure class="plate char-ph rv"><img src="img/photos/volunteers.webp" alt="Volunteers in matching shirts after cleaning up a neighborhood park" loading="lazy"><figcaption><span>Representative photography</span><span>Photo: Vitaly Gariev / Pexels</span></figcaption></figure>
     </div>
   </section>
 
-  <section id="faq" aria-labelledby="faq-h" style="padding-top:0">
+  <section class="stone ch" id="faq" aria-labelledby="faq-h" style="padding-top:0">
     <div class="wrap faq">
-      <div><h2 class="disp" id="faq-h">Fair questions.</h2></div>
+      <div class="faq-h"><h2 class="disp" id="faq-h">Fair questions.</h2></div>
       <div class="qs">
         <details><summary>Does Givv take money from my account?</summary><p>No. Givv only counts. On Give day it opens your charity’s donation page and you decide there: the full amount, a different amount, or not yet.</p></details>
         <details><summary>Why not just set up a monthly donation?</summary><p>If a fixed amount suits you, do. Givv is for giving that moves with your life: your spare change rises and falls with what you spend, you can take a month off before its Give day, and your year adds up to one record for tax time. Your charity still gets a monthly gift on its own page.</p></details>
@@ -415,9 +530,9 @@ input[aria-invalid=true]{border-color:#E39A88!important}
     </div>
   </section>
 
-  <section id="join" aria-labelledby="ac-h" style="padding-top:0">
+  <section class="forest ch" id="join" aria-labelledby="ac-h">
     <div class="wrap">
-      <div class="sec-h">
+      <div class="join-h">
         <h2 class="disp" id="ac-h">Your money’s just sitting there. Put it to work.</h2>
         <p class="lead">Givv is in private beta. Leave your email and we’ll tell you when your spot opens. Charities on the list are invited first.</p>
       </div>
@@ -450,19 +565,20 @@ input[aria-invalid=true]{border-color:#E39A88!important}
   </section>
 </main>
 
-<div class="wrap">
-  <footer class="foot">
-    <a class="logo" href="#top"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8A16 16 0 1 1 8.96 18.53" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><circle cx="14.82" cy="10.89" r="3" fill="#C99267"/></svg>givv</a>
+<div class="forest">
+  <footer class="wrap"><div class="foot">
+    <a class="logo" href="#top" aria-label="Givv, back to top"><svg width="32" height="32" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8A16 16 0 1 1 8.96 18.53" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="14.82" cy="10.89" r="3" fill="#C9A15E"/></svg>givv</a>
     <div class="foot-row">
       <p>Givv is in development. Charities, numbers and the invite link on this page are samples. Givv does not collect, hold or move donations; you give directly to your charity on their own donation page.</p>
       <p>Apple Pay and Apple Card are trademarks of Apple Inc.</p>
     </div>
     <details class="credits"><summary>Photo credits</summary>
-      <p style="margin:8px 0 0">Photographs via Pexels (Pexels License). The iPhone photo shows Givv’s own Today screen, placed on the photographed phone. Representative photography of missions is from FIG (figgiving.com); those images illustrate a kind of mission, not any charity’s programs, participants or results, and no partnership or endorsement is implied.</p>
+      <p style="margin:10px 0 0;max-width:80ch">Photographs via Pexels (Pexels License). The iPhone photo shows Givv’s own Today screen, placed on the photographed phone. Representative photography of missions is from FIG (figgiving.com); those images illustrate a kind of mission, not any charity’s programs, participants or results, and no partnership or endorsement is implied.</p>
       <ul>
         <li>Coin on silk: Diego Alejandro López</li>
         <li>Penny: Todd Trapani</li>
         <li>Hand holding a phone: Luis Quintero</li>
+        <li>Coffee cup: Mathilde Langevin</li>
         <li>Open hands: Kindel Media</li>
         <li>Fresh food: RDNE Stock project</li>
         <li>A hot meal: RDNE Stock project</li>
@@ -472,17 +588,20 @@ input[aria-invalid=true]{border-color:#E39A88!important}
         <li>Volunteers: Vitaly Gariev</li>
       </ul>
     </details>
-  </footer>
+  </div></footer>
 </div>
 <script>
 (function(){
-  /* The one scroll effect: the penny drifts a little slower than the page. Nav gains a backing once you scroll. */
-  const nav=document.getElementById('nav'),lib=document.getElementById('liberty-img');
-  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* The nav gains a backing once you scroll. Plates settle once as they arrive (CSS skips this under reduced motion). */
+  const nav=document.getElementById('nav');
   let raf=0;
-  const frame=()=>{raf=0;nav.classList.toggle('solid',scrollY>40);
-    if(!still&&lib){const r=lib.parentElement.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight)lib.style.setProperty('--par',((r.top+r.height/2-innerHeight/2)*-.12).toFixed(1))}};
+  const frame=()=>{raf=0;nav.classList.toggle('solid',scrollY>40)};
   addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(frame)},{passive:true});frame();
+  const rv=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+    rv.forEach(el=>io.observe(el));
+  }else rv.forEach(el=>el.classList.add('in'));
 
   /* ---------- Waitlist ---------- */
   const wl=document.getElementById('wl'),msg=document.getElementById('wl-msg'),wbtn=document.getElementById('wl-btn');
@@ -537,7 +656,7 @@ input[aria-invalid=true]{border-color:#E39A88!important}
   async function save(rec,btn,out){
     if(document.getElementById('wl-hp').value){joined(rec.email);return}
     if(WAITLIST_URL){
-      btn.disabled=true;btn.textContent='Joining…';
+      btn.disabled=true;btn.textContent='Joining…';say(out,'');
       const body=new URLSearchParams({email:rec.email,role:rec.role,org:rec.org,iphone:rec.iphone==null?'':rec.iphone?'yes':'no',invite:inviteSlug});
       if(/(^|\.)formsubmit\.co$/.test(new URL(WAITLIST_URL,location.href).hostname)){body.set('_subject',`Givv waitlist: ${rec.role}${rec.org?', '+rec.org:''}`);body.set('_template','table')}
       /* The form service can take most of a minute to answer: say so after a few seconds, and give up after 90. */
@@ -591,4 +710,3 @@ input[aria-invalid=true]{border-color:#E39A88!important}
   }
 })();
 </script>
-
